@@ -5,7 +5,10 @@ export function rota(caminho = ''): string {
   const limpo = caminho.replace(/^\//, '');
   if (!limpo) return `${base}/`;
   if (limpo.startsWith('#')) return `${base}/${limpo}`;
-  return `${base}/${limpo}`.replace(/([^/#?])$/, '$1/');
+  // Arquivo (tem extensão: logo.png) fica como está; página ganha a barra final.
+  const ultimo = limpo.split(/[?#]/)[0].split('/').pop() ?? '';
+  if (ultimo.includes('.') || /[?#]/.test(limpo)) return `${base}/${limpo}`;
+  return `${base}/${limpo}/`;
 }
 
 export const MENU = [
