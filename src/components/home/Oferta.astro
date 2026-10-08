@@ -1,0 +1,75 @@
+---
+// O mesmo carrinho da tela de Oferta do app (presets + "Outro"), e o mesmo
+// destino: a Edge Function create-checkout-session → Stripe Checkout.
+import Icone from '../Icone.astro';
+import { OFERTA_VALORES, OFERTA_MAXIMO, LINKS } from '../../lib/config';
+---
+<div class="oferta cartao" data-oferta data-checkout={LINKS.checkout} data-maximo={OFERTA_MAXIMO}>
+  <p class="oferta-obrigado" data-obrigado hidden>Obrigado pela sua oferta! Deus abençoe.</p>
+  <span class="rotulo" id="oferta-rotulo">Escolha um valor</span>
+  <div class="valores" role="group" aria-labelledby="oferta-rotulo">
+    {OFERTA_VALORES.map((v, i) => (
+      <button type="button" class="valor" data-valor={v} aria-pressed={i === 1 ? 'true' : 'false'}>£{v}</button>
+    ))}
+    <button type="button" class="valor valor-outro" data-outro aria-pressed="false">Outro</button>
+  </div>
+  <label class="campo-outro" data-campo-outro>
+    <span>£</span>
+    <input type="text" inputmode="decimal" placeholder="0.00" aria-label="Outro valor em libras" />
+  </label>
+  <p class="oferta-erro" data-erro role="alert"></p>
+  <button type="button" class="btn btn-navy" data-contribuir>
+    <Icone nome="cadeado" tam={15} traco={2} /> <span data-rotulo-botao>Contribuir com</span> <b data-total>£25</b>
+  </button>
+</div>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-oferta]').forEach((caixa) => {
+    const botoes = caixa.querySelectorAll<HTMLButtonElement>('[data-valor]');
+    const outro = caixa.querySelector<HTMLButtonElement>('[data-outro]')!;
+    const campo = caixa.querySelector<HTMLElement>('[data-campo-outro]')!;
+    const input = campo.querySelector('input')!;
+    const total = caixa.querySelector<HTMLElement>('[data-total]')!;
+    const erro = caixa.querySelector<HTMLElement>('[data-erro]')!;
+    const contribuir = caixa.querySelector<HTMLButtonElement>('[data-contribuir]')!;
+    const rotulo = caixa.querySelector<HTMLElement>('[data-rotulo-botao]')!;
+    const maximo = Number(caixa.dataset.maximo);
+    let valor = 25;
+    let livre = false;
+
+    if (new URLSearchParams(location.search).get('oferta') === 'sucesso') {
+      caixa.querySelector<HTMLElement>('[data-obrigado]')!.hidden = false;
+    }
+
+    const atual = () => (livre ? Number(input.value.replace(',', '.')) || 0 : valor);
+
+    function render() {
+      botoes.forEach((b) => b.setAttribute('aria-pressed', String(!livre && Number(b.dataset.valor) === valor)));
+      outro.setAttribute('aria-pressed', String(livre));
+      campo.classList.toggle('aberto', livre);
+      const v = atual();
+      const fora = v > maximo;
+      erro.textContent = fora ? `O valor máximo por oferta é £${maximo.toLocaleString('en-GB')}.` : '';
+      contribuir.disabled = v <= 0 || fora;
+      total.textContent = v > 0 ? `£${v % 1 ? v.toFixed(2) : v}` : '£—';
+    }
+
+    botoes.forEach((b) => b.addEventListener('click', () => { livre = false; valor = Number(b.dataset.valor); render(); }));
+    outro.addEventListener('click', () => { livre = true; render(); input.focus(); });
+    input.addEventListener('input', render);
+    input.addEventListener('keydown', (e) => { if (e.key === 'Enter' && !contribuir.disabled) contribuir.click(); });
+
+    contribuir.addEventListener('click', () => {
+      const v = atual();
+      if (v <= 0 || v > maximo) return;
+      contribuir.disabled = true;
+      rotulo.textContent = 'Abrindo o pagamento…';
+      total.hidden = true;
+      location.href = `${caixa.dataset.checkout}?valor=${Math.round(v * 100) / 100}&moeda=gbp`;
+    });
+
+    // Voltando do Stripe pelo botão "voltar" do navegador, o botão destrava.
+    window.addEventListener('pageshow', () => { rotulo.textContent = 'Contribuir com'; total.hidden = false; render(); });
+    render();
+  });
+</script>

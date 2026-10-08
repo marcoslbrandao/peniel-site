@@ -1,0 +1,50 @@
+---
+import { rota } from '../lib/rotas';
+import { LINKS } from '../lib/config';
+const ano = new Date().getFullYear();
+---
+<footer class="rodape">
+  <div class="wrap">
+    <div class="rodape-topo">
+      <div class="rodape-marca">
+        <a class="marca" href={rota()}>
+          <img src={rota('img/logo.png')} alt="" width="38" height="38" loading="lazy" />
+          <span class="marca-nome">Peniel Church</span>
+        </a>
+        <p>Abbey Square, Reading, RG1 3BE<br /><a href={`mailto:${LINKS.email}`}>{LINKS.email}</a></p>
+      </div>
+
+      <div class="rodape-colunas">
+        <div>
+          <h4>A igreja</h4>
+          <a href={rota('sobre')}>Sobre nós</a>
+          <a href={rota('sobre#no-que-cremos')}>No que cremos</a>
+          <a href={rota('sobre#pastores')}>Liderança</a>
+          <a href={rota('contato')}>Contato</a>
+        </div>
+        <div>
+          <h4>Participe</h4>
+          <a href={rota('agenda')}>Agenda</a>
+          <a href={rota('mensagens')}>Mensagens</a>
+          <a href={rota('devocionais')}>Devocionais</a>
+          <a href={rota('contribua')}>Contribua</a>
+        </div>
+        <div>
+          <h4>Acompanhe</h4>
+          <a href={LINKS.youtube} rel="noopener">YouTube</a>
+          <a href={LINKS.instagram} rel="noopener">Instagram</a>
+          <a href={LINKS.facebook} rel="noopener">Facebook</a>
+          <a href={LINKS.app}>Baixar o app</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="rodape-base">
+      <span>© {ano} Peniel Church · Reading, Reino Unido</span>
+      <nav aria-label="Rodapé">
+        <a href={rota('politica-de-privacidade')}>Política de Privacidade</a>
+        <a href={rota('#live-translation')} lang="en">English</a>
+      </nav>
+    </div>
+  </div>
+</footer>

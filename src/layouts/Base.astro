@@ -1,0 +1,78 @@
+---
+import '../styles/global.css';
+import Cabecalho from '../components/Cabecalho.astro';
+import Rodape from '../components/Rodape.astro';
+import { rota } from '../lib/rotas';
+import { LINKS } from '../lib/config';
+
+interface Props { titulo?: string; descricao?: string; atual?: string }
+const {
+  titulo = 'Peniel Church · Igreja brasileira em Reading, UK',
+  descricao = 'Uma igreja brasileira no coração de Reading. Culto todo domingo às 18h em Abbey Square, com tradução ao vivo para inglês e espanhol.',
+  atual = '',
+} = Astro.props;
+const canonica = new URL(Astro.url.pathname, Astro.site);
+const imagemSocial = new URL(rota('img/pastores.jpg'), Astro.site);
+
+const igreja = {
+  '@context': 'https://schema.org',
+  '@type': 'Church',
+  name: 'Peniel Church',
+  url: canonica.origin + rota(),
+  email: LINKS.email,
+  logo: new URL(rota('img/logo.png'), Astro.site).href,
+  address: { '@type': 'PostalAddress', streetAddress: 'Abbey Square', addressLocality: 'Reading', postalCode: 'RG1 3BE', addressCountry: 'GB' },
+  geo: { '@type': 'GeoCoordinates', latitude: 51.4554719, longitude: -0.9672378 },
+  sameAs: [LINKS.youtube, LINKS.instagram, LINKS.facebook],
+};
+---
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{titulo}</title>
+  <meta name="description" content={descricao} />
+  <link rel="canonical" href={canonica} />
+  <link rel="icon" type="image/png" href={rota('favicon.png')} />
+  <link rel="apple-touch-icon" href={rota('img/logo.png')} />
+  <meta name="theme-color" content="#1A1740" />
+  <meta property="og:type" content="website" />
+  <meta property="og:locale" content="pt_BR" />
+  <meta property="og:site_name" content="Peniel Church" />
+  <meta property="og:title" content={titulo} />
+  <meta property="og:description" content={descricao} />
+  <meta property="og:url" content={canonica} />
+  <meta property="og:image" content={imagemSocial} />
+  <script is:inline>document.documentElement.classList.add('js');</script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&family=Work+Sans:wght@300;400;500;600&display=swap" />
+  <script type="application/ld+json" set:html={JSON.stringify(igreja)} />
+</head>
+<body>
+  <a class="sr-only" href="#conteudo">Pular para o conteúdo</a>
+  <Cabecalho atual={atual} />
+  <main id="conteudo">
+    <slot />
+  </main>
+  <Rodape />
+  <script>
+    const topo = document.querySelector('.topo');
+    const aoRolar = () => topo?.classList.toggle('rolou', scrollY > 8);
+    addEventListener('scroll', aoRolar, { passive: true });
+    aoRolar();
+
+    const reduz = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const alvos = document.querySelectorAll('main > section:not(.hero)');
+    if (reduz || !('IntersectionObserver' in window)) {
+      document.documentElement.classList.remove('js');
+    } else {
+      const io = new IntersectionObserver((itens) => itens.forEach((i) => {
+        if (i.isIntersecting) { i.target.classList.add('visivel'); io.unobserve(i.target); }
+      }), { rootMargin: '0px 0px -8% 0px' });
+      alvos.forEach((el) => { el.classList.add('revela'); io.observe(el); });
+    }
+  </script>
+</body>
+</html>

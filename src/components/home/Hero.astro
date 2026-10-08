@@ -1,0 +1,79 @@
+---
+import Icone from '../Icone.astro';
+import { rota } from '../../lib/rotas';
+import { LINKS, CULTO } from '../../lib/config';
+import { proximoDomingo } from '../../lib/datas';
+---
+<section class="hero" data-aovivo="nao" aria-labelledby="hero-titulo">
+  <div class="wrap">
+    <div class="hero-texto">
+      <a class="selo-aovivo so-ao-vivo" href={LINKS.youtubeAoVivo} rel="noopener">
+        <span class="ponto"></span> AO VIVO AGORA
+      </a>
+
+      <h1 id="hero-titulo">Uma igreja brasileira no coração de Reading</h1>
+
+      <p class="hero-lead">Somos uma família de brasileiros e amigos de muitos lugares que se encontra todo domingo em Abbey Square. Se você acabou de chegar ao Reino Unido, ou mora aqui há anos e está procurando uma igreja, venha nos visitar — não precisa avisar, e não precisa ser ninguém além de quem você é.</p>
+
+      <div class="hero-botoes">
+        <a class="btn btn-dourado" href={rota('#primeira-vez')}>
+          Planeje sua visita <Icone nome="seta" tam={17} traco={2.2} />
+        </a>
+        <a class="btn btn-vidro" href={LINKS.youtubeAoVivo} rel="noopener">
+          <Icone nome="play" tam={17} traco={1.9} /> Assistir ao vivo
+        </a>
+      </div>
+    </div>
+
+    <aside class="card-culto" aria-label="Próximo culto">
+      <div>
+        <span class="rotulo">Próximo culto</span>
+        <h3 style="margin-top:5px">Domingo, 18h</h3>
+        <span class="data-culto" data-proximo-domingo>{proximoDomingo()}</span>
+      </div>
+      <div class="linha"></div>
+      <div style="display:flex;flex-direction:column;gap:13px">
+        <div class="info">
+          <Icone nome="pino" tam={19} cor="#534AB7" traco={1.7} />
+          <div><strong>{CULTO.local}</strong><span>{CULTO.cidade}</span></div>
+        </div>
+        <div class="info">
+          <Icone nome="relogio" tam={19} cor="#534AB7" traco={1.7} />
+          <div><strong>Das 18h às 20h</strong><span>Chegue uns 15 minutos antes</span></div>
+        </div>
+      </div>
+      <div class="nota-traducao">
+        <Icone nome="microfone" tam={19} cor="#1A1740" traco={1.7} />
+        <p><strong>Não fala português?</strong> O culto tem tradução ao vivo para inglês e espanhol <a href={rota('#live-translation')}>pelo app</a>.</p>
+      </div>
+    </aside>
+  </div>
+</section>
+
+<script>
+  import { aoVivoPeloHorario, proximoDomingo } from '../../lib/datas';
+  import { SUPABASE_URL, SUPABASE_ANON_KEY } from '../../lib/config';
+
+  const hero = document.querySelector<HTMLElement>('.hero');
+  const liga = (v: boolean) => hero && (hero.dataset.aovivo = v ? 'sim' : 'nao');
+
+  // A data do próximo domingo é recalculada no navegador: o HTML pode ter
+  // sido gerado ontem.
+  document.querySelectorAll('[data-proximo-domingo]').forEach((el) => (el.textContent = proximoDomingo()));
+
+  // "AO VIVO" acende pelo horário do culto (domingo 18h–20h em Londres) OU
+  // quando a tradução ao vivo está ligada no Painel Admin — o sinal mais
+  // confiável de que o culto começou, sem gastar cota do YouTube.
+  async function checar() {
+    let ativo = aoVivoPeloHorario();
+    try {
+      const r = await fetch(`${SUPABASE_URL}/rest/v1/traducao_ao_vivo?select=ativa&id=eq.1`, {
+        headers: { apikey: SUPABASE_ANON_KEY, Authorization: `Bearer ${SUPABASE_ANON_KEY}` },
+      });
+      if (r.ok) ativo = ativo || !!(await r.json())[0]?.ativa;
+    } catch { /* sem rede: fica só o horário */ }
+    liga(ativo);
+  }
+  checar();
+  setInterval(checar, 120_000);
+</script>

@@ -1,0 +1,352 @@
+---
+import Base from '../layouts/Base.astro';
+import Icone from '../components/Icone.astro';
+import Hero from '../components/home/Hero.astro';
+import Oferta from '../components/home/Oferta.astro';
+import { rota } from '../lib/rotas';
+import { LINKS, GOOGLE_PLAY_NO_AR } from '../lib/config';
+import { encontrosDaSemana, devocionalDeHoje, ultimasMensagens, proximoEstudo, dataBR, horaCurta, resumir, DIAS } from '../lib/dados';
+import { cartoes } from '../lib/encontros';
+import { diaMes, proximaData } from '../lib/datas';
+
+// Tudo em paralelo: o build não espera uma consulta para começar a outra.
+const [eventos, devocional, mensagens, estudoISO] = await Promise.all([
+  encontrosDaSemana(), devocionalDeHoje(), ultimasMensagens(), proximoEstudo(),
+]);
+const semana = cartoes(eventos);
+
+// Reflexão sem as seções fixas do devocional ("Para refletir", "Oração:"…).
+const reflexao = devocional
+  ? resumir(devocional.texto.split(/\n\s*(Para refletir|Oração:|Referências)/i)[0], 210)
+  : '';
+
+// Mini-celular: os dois próximos encontros de verdade.
+const estudo = eventos.find((e) => /estudo/i.test(e.nome));
+const culto = eventos.find((e) => /culto/i.test(e.nome));
+const miniEventos = [
+  estudo && { nome: 'Estudo Bíblico', quando: `${DIAS[estudo.dia_semana!]} · ${horaCurta(estudo.horario)} · Zoom`, iso: estudoISO ?? proximaData(estudo.dia_semana!), cor: 'capa-0' },
+  culto && { nome: 'Culto Dominical', quando: `Domingo · ${horaCurta(culto.horario)}`, iso: proximaData(0), cor: 'capa-1' },
+].filter(Boolean).sort((a: any, b: any) => a.iso.localeCompare(b.iso)) as { nome: string; quando: string; iso: string; cor: string }[];
+---
+<Base atual="">
+  <Hero />
+
+  <!-- ─── A semana na Peniel ─────────────────────────────── -->
+  <section class="secao" aria-labelledby="semana-titulo">
+    <div class="wrap">
+      <div class="cabeca-secao">
+        <div>
+          <h2 class="secao-titulo" id="semana-titulo">A semana na Peniel</h2>
+          <p class="secao-sub">Quatro encontros, presenciais e online. Todos abertos a quem quiser chegar.</p>
+        </div>
+        <a class="link-seta" href={rota('agenda')}>Ver a agenda completa <Icone nome="seta" tam={16} traco={2.2} /></a>
+      </div>
+
+      <div class="semana">
+        {semana.map((c) => (
+          <article class="cartao encontro">
+            <div class="encontro-topo">
+              <span class="encontro-dia">{c.dia}</span>
+              <span class={`selo ${c.selo.classe}`}>{c.selo.rotulo}</span>
+            </div>
+            <div>
+              <h3>{c.titulo}</h3>
+              <span class="encontro-quando">{c.quando}</span>
+            </div>
+            <p>{c.convite}</p>
+            {c.ehEstudo && estudoISO && <span class="encontro-proximo">Próximo: {dataBR(estudoISO)}</span>}
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── Propósito + pastores ───────────────────────────── -->
+  <section class="secao" aria-labelledby="proposito-titulo">
+    <div class="wrap proposito">
+      <div class="proposito-texto">
+        <blockquote class="epigrafe">
+          <p>“E, assim, se alguém está em Cristo, é nova criação; as coisas antigas já passaram; eis que se fizeram novas.”</p>
+          <cite>2 Coríntios 5:17</cite>
+        </blockquote>
+
+        <div>
+          <h2 class="secao-titulo" id="proposito-titulo">Nosso propósito</h2>
+          <p class="corpo">Existimos por um único propósito: promover e estabelecer o Reino de Deus em cada lugar para onde Ele nos levar. Não nos consideramos mais do que um instrumento em Suas mãos — e é assim que queremos servir: refletindo o amor de Deus ao próximo e tornando o Evangelho acessível a todos, sem exceção.</p>
+        </div>
+
+        <a class="cartao cremos" href={rota('sobre#no-que-cremos')}>
+          <div>
+            <Icone nome="livro" tam={22} cor="#534AB7" traco={1.7} />
+            <div>
+              <h4>No que cremos</h4>
+              <p>Dez afirmações que sustentam o que ensinamos e como vivemos — das Escrituras à missão da Igreja.</p>
+            </div>
+          </div>
+          <Icone nome="seta" tam={18} cor="#534AB7" traco={2.2} />
+        </a>
+      </div>
+
+      <article class="cartao pastores">
+        <div class="pastores-foto">
+          <img src={rota('img/pastores.jpg')} alt="Pastores Marcos e Débora Brandão" width="1000" height="510" loading="lazy" />
+        </div>
+        <div class="pastores-corpo">
+          <div>
+            <span class="rotulo">Pastores</span>
+            <h3>Marcos &amp; Débora Brandão</h3>
+          </div>
+          <p>Vieram do Brasil em 2003 com a ideia de ficar dois anos. Chegaram à Peniel, em Reading, em 4 de março de 2017 — e desde então pastoreiam a igreja.</p>
+          <a class="link-seta" href={rota('sobre#pastores')}>Conheça a história deles <Icone nome="seta" tam={16} traco={2.2} /></a>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- ─── Primeira vez aqui? ─────────────────────────────── -->
+  <section class="secao" id="primeira-vez" aria-labelledby="primeira-titulo">
+    <div class="wrap">
+      <div class="cartao primeira">
+        <div class="primeira-intro">
+          <h2 class="secao-titulo" id="primeira-titulo">Primeira vez aqui?</h2>
+          <p>Chegar numa igreja onde você não conhece ninguém é desconfortável. A gente sabe — boa parte de nós já passou por isso ao mudar de país. Aqui vai o que esperar, para você chegar sabendo.</p>
+          <a class="link-seta" href={`mailto:${LINKS.email}?subject=Quero%20visitar%20a%20Peniel`}>Fale com alguém antes de vir <Icone nome="seta" tam={16} traco={2.2} /></a>
+        </div>
+
+        <div class="primeira-grade">
+          <div class="dica">
+            <Icone nome="relogio" tam={22} cor="#1A1740" traco={1.7} />
+            <div>
+              <h4>Que horas chegar</h4>
+              <p>O culto é das <strong>18h às 20h</strong>. Chegue uns 15 minutos antes — dá tempo de ser recebido e de achar um lugar sem pressa.</p>
+            </div>
+          </div>
+          <div class="dica">
+            <Icone nome="familia" tam={22} cor="#1A1740" traco={1.7} />
+            <div>
+              <h4>Crianças</h4>
+              <p>Temos ministério infantil. Pode vir com as crianças — elas têm o espaço delas aqui.</p>
+            </div>
+          </div>
+          <div class="dica">
+            <Icone nome="estacionamento" tam={22} cor="#1A1740" traco={1.7} />
+            <div>
+              <h4>Estacionamento</h4>
+              <p>Temos poucas vagas na igreja, mas há dois estacionamentos a 5 minutos a pé: <a href={LINKS.estacionamentoHorseBarge} rel="noopener">Horse and Barge</a> e <a href={LINKS.estacionamentoQueensRoad} rel="noopener">Queens Road</a>.</p>
+            </div>
+          </div>
+          <div class="dica">
+            <Icone nome="balao" tam={22} cor="#1A1740" traco={1.7} />
+            <div>
+              <h4>Em que língua</h4>
+              <p>O culto é em português, com tradução ao vivo para inglês e espanhol pelo app.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── Devocional + mensagens (do Supabase) ───────────── -->
+  <section class="secao" aria-label="Leitura da semana">
+    <div class="wrap leitura">
+      {devocional ? (
+        <article class="devocional" aria-labelledby="devocional-titulo">
+          {devocional.imagem_url && (
+            <div class="devocional-foto"><img src={devocional.imagem_url} alt="" width="1600" height="800" loading="lazy" /></div>
+          )}
+          <div class="devocional-corpo">
+            <div class="devocional-topo">
+              <span class="devocional-marca"><Icone nome="livro" tam={18} cor="#F5C842" /> Devocional Peniel</span>
+              <span class="devocional-data">{dataBR(devocional.data)}</span>
+            </div>
+            <h3 id="devocional-titulo">{devocional.titulo}</h3>
+            <blockquote>
+              <p>“{devocional.versiculo}”</p>
+              <cite>{devocional.referencia}</cite>
+            </blockquote>
+            {reflexao && <p class="devocional-texto">{reflexao}</p>}
+            <div class="linha"></div>
+            <a class="link-seta" href={rota('devocionais')}>Ler o devocional completo <Icone nome="seta" tam={17} traco={2.2} /></a>
+          </div>
+        </article>
+      ) : (
+        <article class="devocional">
+          <div class="devocional-corpo">
+            <span class="devocional-marca"><Icone nome="livro" tam={18} cor="#F5C842" /> Devocional Peniel</span>
+            <blockquote>
+              <p>“Lâmpada para os meus pés é a tua palavra, e luz para o meu caminho.”</p>
+              <cite>Salmos 119:105</cite>
+            </blockquote>
+            <p class="devocional-texto">Toda segunda, quarta e sexta sai um devocional novo, aqui e no app.</p>
+            <div class="linha"></div>
+            <a class="link-seta" href={rota('devocionais')}>Ver devocionais <Icone nome="seta" tam={17} traco={2.2} /></a>
+          </div>
+        </article>
+      )}
+
+      <div class="mensagens">
+        <div class="cabeca-secao">
+          <div><h2 class="secao-titulo">Últimas mensagens</h2></div>
+          <a class="link-seta" href={rota('mensagens')}>Ver todas <Icone nome="seta" tam={16} traco={2.2} /></a>
+        </div>
+
+        <div class="lista-mensagens">
+          {mensagens.length ? mensagens.map((m, i) => (
+            <a class="cartao mensagem" href={rota(`mensagens#m-${m.id}`)}>
+              <div class={`mensagem-capa capa-${i % 3}`}>
+                {m.imagem_url ? <img src={m.imagem_url} alt="" loading="lazy" /> : <Icone nome="documento" tam={22} traco={1.6} />}
+              </div>
+              <div class="mensagem-corpo">
+                <span class="mensagem-meta">{dataBR(m.data)} · {m.autor}</span>
+                <h3>{m.titulo}</h3>
+                <p>{resumir(m.resumo, 150)}</p>
+              </div>
+            </a>
+          )) : (
+            <div class="cartao vazio">As mensagens de domingo aparecem aqui assim que forem publicadas. Enquanto isso, <a href={LINKS.youtube} rel="noopener">assista aos cultos no YouTube</a>.</div>
+          )}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── Live translation (em inglês, de propósito) ─────── -->
+  <section class="secao" id="live-translation" lang="en" aria-labelledby="traducao-titulo">
+    <div class="wrap">
+      <div class="cartao traducao">
+        <div class="traducao-icone"><Icone nome="fone" tam={34} cor="#FFFFFF" traco={1.7} /></div>
+        <div class="traducao-texto">
+          <h2 id="traducao-titulo">Our service is in Portuguese. You can still follow every word.</h2>
+          <p>Open the Peniel Church app during the service, tap <strong>Live translation</strong>, put your headphones in, and listen in <strong>English</strong> or <strong>Spanish</strong>, interpreted live as the pastor speaks. Nothing to set up, no extra app, no cost.</p>
+        </div>
+        <a class="btn btn-navy" href={LINKS.app}>Get the app <Icone nome="seta" tam={17} traco={2.2} /></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── O app ──────────────────────────────────────────── -->
+  <section class="app" aria-labelledby="app-titulo">
+    <div class="wrap">
+      <div class="app-texto">
+        <h2 id="app-titulo">O site é a porta. O app é a casa.</h2>
+        <p>Quem já faz parte da Peniel vive a semana pelo app: grupos, escalas, pedidos de oração e o estudo de quarta ficam na Área do Membro. Mas não é preciso ser membro para usar — a Bíblia, os devocionais, o versículo do dia, a agenda e os avisos da igreja estão abertos a qualquer pessoa. Baixar é de graça.</p>
+
+        <ul class="recursos">
+          {['Bíblia completa em 4 idiomas', 'Devocional três vezes por semana', 'Grupos, chat e escalas', 'Agenda e avisos da igreja', 'Oferta segura em segundos', 'Tradução ao vivo do culto'].map((r) => (
+            <li><Icone nome="check" tam={17} cor="#F5C842" traco={2.4} />{r}</li>
+          ))}
+        </ul>
+
+        <div class="lojas">
+          <a class="loja loja-ativa" href={LINKS.appStore} rel="noopener">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="#1A1542" aria-hidden="true"><path d="M16.4 12.7c0-2 1.6-3 1.7-3-.9-1.4-2.4-1.5-2.9-1.6-1.2-.1-2.4.7-3 .7s-1.6-.7-2.6-.7c-1.3 0-2.6.8-3.3 2-1.4 2.4-.4 6 1 8 .7 1 1.5 2 2.5 2 1 0 1.4-.6 2.6-.6s1.5.6 2.6.6 1.7-1 2.4-2c.7-1.1 1-2.2 1-2.3 0 0-1.9-.7-2-3.1ZM14.5 6.3c.5-.7.9-1.6.8-2.5-.8 0-1.8.5-2.4 1.2-.5.6-1 1.6-.8 2.5.9.1 1.8-.4 2.4-1.2Z"/></svg>
+            <span><small>Baixar na</small><b>App Store</b></span>
+          </a>
+          {GOOGLE_PLAY_NO_AR ? (
+            <a class="loja loja-ativa" href={LINKS.googlePlay} rel="noopener">
+              <Icone nome="googleplay" tam={22} cor="#1A1542" />
+              <span><small>Disponível no</small><b>Google Play</b></span>
+            </a>
+          ) : (
+            <span class="loja loja-embreve" aria-label="Google Play: em breve">
+              <Icone nome="googleplay" tam={22} cor="rgba(255,255,255,0.55)" traco={1.7} />
+              <span><small>Google Play</small><b>Em breve</b></span>
+            </span>
+          )}
+        </div>
+      </div>
+
+      <div class="app-celular" aria-hidden="true">
+        <div class="celular">
+          <div class="celular-topo"><span>Boa noite,</span><span>Peniel Church</span></div>
+          <div class="celular-corpo">
+            <div class="cel-aovivo"><i></i>Ao vivo agora</div>
+            <div class="cel-card">
+              <span class="cel-rotulo">{devocional ? 'DEVOCIONAL PENIEL' : 'VERSÍCULO DO DIA'}</span>
+              <span style="font-size:12.5px;line-height:1.5;color:#1A1A2E;font-style:italic">“{devocional ? resumir(devocional.versiculo, 70) : 'Lâmpada para os meus pés é a tua palavra.'}”</span>
+              <span style="font-size:11px;font-weight:700;color:#534AB7">{devocional?.referencia ?? 'Salmos 119:105'}</span>
+            </div>
+            <div class="cel-card" style="gap:9px">
+              <span class="cel-rotulo">PRÓXIMOS EVENTOS</span>
+              {miniEventos.map((e) => {
+                const dm = diaMes(e.iso);
+                return (
+                  <div class="cel-evento">
+                    <div class={`cel-data ${e.cor}`}><b>{dm.dia}</b><small>{dm.mes}</small></div>
+                    <div><strong>{e.nome}</strong><span>{e.quando}</span></div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+          <div class="celular-abas">
+            <Icone nome="casa" tam={19} cor="#534AB7" />
+            <Icone nome="livro" tam={19} cor="#C9C4E8" />
+            <Icone nome="calendario" tam={19} cor="#C9C4E8" />
+            <Icone nome="pessoa" tam={19} cor="#C9C4E8" />
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── Contribua ──────────────────────────────────────── -->
+  <section id="oferta" aria-labelledby="contribua-titulo">
+    <div class="wrap contribua">
+      <div class="contribua-texto">
+        <h2 id="contribua-titulo">Contribua com a obra</h2>
+        <p>Sua oferta contribui com a manutenção da igreja, com missões e com quem bate à nossa porta precisando de ajuda. É o que mantém as portas abertas e o trabalho seguindo durante a semana, dentro e fora daqui. O pagamento é processado pelo Stripe — a Peniel não guarda nenhum dado do seu cartão.</p>
+        <div class="garantias">
+          <span><Icone nome="cadeado" tam={16} cor="#27AE60" traco={2} /> Conexão segura</span>
+          <span><Icone nome="escudo" tam={16} cor="#27AE60" traco={2} /> Pagamento processado pelo Stripe</span>
+        </div>
+      </div>
+      <Oferta />
+    </div>
+  </section>
+
+  <!-- ─── Venha nos visitar ──────────────────────────────── -->
+  <section aria-labelledby="visite-titulo" style="padding-bottom:84px">
+    <div class="wrap">
+      <div class="cartao visite">
+        <div class="visite-info">
+          <h2 class="secao-titulo" id="visite-titulo">Venha nos visitar</h2>
+          <div style="display:flex;flex-direction:column;gap:18px">
+            <div class="info">
+              <Icone nome="pino" tam={20} cor="#534AB7" traco={1.7} />
+              <div><strong>Abbey Square</strong><span>Reading, RG1 3BE · Reino Unido</span></div>
+            </div>
+            <div class="info">
+              <Icone nome="email" tam={20} cor="#534AB7" traco={1.7} />
+              <div><strong><a href={`mailto:${LINKS.email}`} style="color:inherit">{LINKS.email}</a></strong><span>Escreva com qualquer pergunta — alguém responde.</span></div>
+            </div>
+          </div>
+          <div class="linha"></div>
+          <dl class="horarios">
+            {semana.map((c) => (
+              <div><dt>{c.titulo}</dt><dd>{c.dia}, {c.quando.replace(' · Abbey Square', '').replace(' · Jovens', '')}</dd></div>
+            ))}
+          </dl>
+          <a class="btn btn-navy" href={LINKS.mapa} rel="noopener">Como chegar <Icone nome="seta" tam={16} traco={2.2} /></a>
+        </div>
+
+        <a class="mapa" href={LINKS.mapa} rel="noopener" aria-label="Abrir a Peniel Church no Google Maps">
+          <div class="mapa-ruas">
+            <i style="top:30%;left:0;right:0;height:12px"></i>
+            <i style="top:64%;left:0;right:0;height:18px"></i>
+            <i style="top:0;bottom:0;left:24%;width:14px"></i>
+            <i style="top:0;bottom:0;left:62%;width:10px"></i>
+            <i style="top:38%;left:30%;width:22%;height:22%;border-radius:4px;background:#E4E0D6"></i>
+            <i style="top:72%;left:68%;width:18%;height:18%;border-radius:4px;background:#E4E0D6"></i>
+          </div>
+          <div class="mapa-pino">
+            <img src={rota('img/logo.png')} alt="" width="52" height="52" loading="lazy" />
+            <span>Peniel Church</span>
+          </div>
+          <span class="mapa-abrir"><Icone nome="pino" tam={14} cor="#534AB7" traco={2} /> Abrir no Google Maps</span>
+        </a>
+      </div>
+    </div>
+  </section>
+</Base>

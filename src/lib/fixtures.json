@@ -1,0 +1,18 @@
+{
+  "_sobre": "Reserva e dados de teste. 'encontros' também é a RESERVA DE PRODUÇÃO caso o Supabase não responda no build — mantenha igual à agenda real. O resto só é usado com PENIEL_FIXTURES=1.",
+  "encontros": [
+    { "id": "f-dom", "nome": "Culto Dominical", "tipo": "presencial", "recorrente": true, "dia_semana": 0, "data": null, "horario": "18h00", "local": "Abbey Square, Reading", "descricao": null },
+    { "id": "f-ter", "nome": "Sala de Oração", "tipo": "online", "recorrente": true, "dia_semana": 2, "data": null, "horario": "21h00", "local": "Zoom", "descricao": null },
+    { "id": "f-qua", "nome": "Estudo Bíblico", "tipo": "online", "recorrente": true, "dia_semana": 3, "data": null, "horario": "20h00", "local": "Zoom", "descricao": null },
+    { "id": "f-sab", "nome": "Reunião de Jovens", "tipo": "casa", "recorrente": true, "dia_semana": 6, "data": null, "horario": "19h00", "local": "Nas casas", "descricao": null }
+  ],
+  "devocional": [
+    { "id": "f-dev", "titulo": "Pergunte pelo bom caminho", "versiculo": "Ponham-se nas encruzilhadas e olhem; perguntem pelos caminhos antigos, perguntem pelo bom caminho. Sigam-no e acharão descanso.", "referencia": "Jeremias 6:16", "texto": "Há momentos em que a vida nos coloca diante de encruzilhadas. Deus não nos deixa sem direção: Ele nos convida a parar, olhar e perguntar. O bom caminho não é o mais rápido nem o mais fácil, mas é o que leva ao descanso para a alma.\n\nPara refletir\nEm que área da sua vida você precisa parar e perguntar pelo bom caminho?", "data": "2026-10-07", "imagem_url": "https://yudulaqsqhzbbarhxbnr.supabase.co/storage/v1/object/public/devocionais/fotos/caminho-1.jpg" }
+  ],
+  "mensagens": [
+    { "id": "f-m1", "titulo": "Reconstruindo os muros", "resumo": "Neemias não começou pela obra, começou pela oração. Antes de reconstruir os muros de Jerusalém, ele chorou, jejuou e buscou a Deus.", "imagem_url": null, "autor": "Pr. Marcos Brandão", "data": "2026-10-04" },
+    { "id": "f-m2", "titulo": "Quando o caminho é longo", "resumo": "O povo de Israel levou quarenta anos para uma viagem de onze dias. O que Deus está formando em nós enquanto caminhamos?", "imagem_url": null, "autor": "Pra. Débora Brandão", "data": "2026-09-27" },
+    { "id": "f-m3", "titulo": "Fé que se levanta", "resumo": "Uma mensagem sobre recomeços: o paralítico de Betesda e a pergunta de Jesus que muda tudo — você quer ser curado?", "imagem_url": null, "autor": "Pr. Marcos Brandão", "data": "2026-09-20" }
+  ],
+  "proximoEstudo": [ { "data": "2026-10-14", "horario": "20h00" } ]
+}

@@ -1,0 +1,30 @@
+---
+// Ícones de traço (mesmo desenho do design da Home). Um lugar só para todos.
+interface Props { nome: string; tam?: number; cor?: string; traco?: number; class?: string }
+const { nome, tam = 20, cor = 'currentColor', traco = 1.8, class: classe } = Astro.props;
+
+const P: Record<string, string> = {
+  seta: '<path d="M5 12h14"/><path d="m13 6 6 6-6 6"/>',
+  pino: '<path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/>',
+  relogio: '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
+  microfone: '<path d="M3 11v2a9 9 0 0 0 18 0v-2"/><path d="M12 19v3"/><rect x="9" y="2" width="6" height="12" rx="3"/>',
+  livro: '<path d="M4 4v15.5A2.5 2.5 0 0 0 6.5 22H20V5"/><path d="M6.5 17H20"/><path d="M4 4h13a3 3 0 0 1 3 3"/>',
+  familia: '<circle cx="9" cy="8" r="3"/><path d="M3 20a6 6 0 0 1 12 0"/><circle cx="17.5" cy="11" r="2"/><path d="M15 20a4.5 4.5 0 0 1 6.5-4"/>',
+  estacionamento: '<rect x="3" y="4" width="18" height="16" rx="3"/><path d="M9 16V8h3.5a2.5 2.5 0 0 1 0 5H9"/>',
+  balao: '<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2Z"/>',
+  documento: '<path d="M4 19V6a2 2 0 0 1 2-2h9l5 5v10a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2Z"/><path d="M14 4v6h6"/>',
+  fone: '<path d="M3 14v-3a9 9 0 0 1 18 0v3"/><path d="M21 15a2 2 0 0 1-2 2h-1v-5h1a2 2 0 0 1 2 2Z"/><path d="M3 15a2 2 0 0 0 2 2h1v-5H5a2 2 0 0 0-2 2Z"/>',
+  check: '<path d="m4 12 5 5L20 7"/>',
+  cadeado: '<rect x="4" y="10" width="16" height="11" rx="2.5"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/>',
+  escudo: '<path d="M12 3 4 6v6c0 4.5 3.3 8.5 8 9.5 4.7-1 8-5 8-9.5V6Z"/><path d="m9 12 2 2 4-4"/>',
+  email: '<rect x="3" y="5" width="18" height="14" rx="2.5"/><path d="m3 7 9 6 9-6"/>',
+  celular: '<rect x="6" y="2" width="12" height="20" rx="2.5"/><path d="M11 18h2"/>',
+  play: '<path d="m10 8 6 4-6 4V8Z"/><rect x="2" y="4" width="20" height="16" rx="3"/>',
+  casa: '<path d="m3 11 9-8 9 8"/><path d="M5 10v10h14V10"/>',
+  calendario: '<rect x="3" y="5" width="18" height="16" rx="3"/><path d="M8 3v4M16 3v4M3 11h18"/>',
+  pessoa: '<circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/>',
+  menu: '<path d="M4 7h16M4 12h16M4 17h16"/>',
+  googleplay: '<path d="m4 3 12 9-12 9V3Z"/>',
+};
+---
+<svg class={classe} width={tam} height={tam} viewBox="0 0 24 24" fill="none" stroke={cor} stroke-width={traco} stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" set:html={P[nome] ?? ''} />

@@ -1,0 +1,17 @@
+{
+  "name": "peniel-site",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Site da Peniel Church (Astro), alimentado pelo mesmo Supabase do app",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "dev:offline": "PENIEL_FIXTURES=1 astro dev",
+    "build:offline": "PENIEL_FIXTURES=1 astro build"
+  },
+  "dependencies": {
+    "astro": "^5.18.2"
+  }
+}
