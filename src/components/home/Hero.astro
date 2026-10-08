@@ -1,5 +1,6 @@
 ---
 import Icone from '../Icone.astro';
+import Bandeira from '../Bandeira.astro';
 import { rota } from '../../lib/rotas';
 import { LINKS, CULTO } from '../../lib/config';
 import { proximoDomingo } from '../../lib/datas';
@@ -43,8 +44,8 @@ import { proximoDomingo } from '../../lib/datas';
         </div>
       </div>
       <div class="nota-traducao">
-        <Icone nome="microfone" tam={19} cor="#1A1740" traco={1.7} />
-        <p><strong>Não fala português?</strong> O culto tem tradução ao vivo para inglês e espanhol <a href={rota('#live-translation')}>pelo app</a>.</p>
+        <p lang="en"><Bandeira pais="gb" /><span><strong>Don’t speak Portuguese?</strong> Follow the service with live translation into English or Spanish <a href={rota('#live-translation')}>in our app</a>.</span></p>
+        <p lang="es"><Bandeira pais="es" /><span><strong>¿No hablas portugués?</strong> Sigue el culto con traducción en vivo al inglés o al español <a href={rota('#live-translation')}>en nuestra app</a>.</span></p>
       </div>
     </aside>
   </div>

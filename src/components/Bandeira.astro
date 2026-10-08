@@ -1,0 +1,26 @@
+---
+// Bandeiras em SVG (emoji de bandeira não aparece no Windows: vira "GB"/"ES").
+interface Props { pais: 'gb' | 'es'; tam?: number }
+const { pais, tam = 20 } = Astro.props;
+const altura = Math.round((tam * 2) / 3);
+---
+{pais === 'gb' ? (
+  <svg class="bandeira" width={tam} height={altura} viewBox="0 0 60 40" aria-hidden="true">
+    <clipPath id="gb-c"><rect width="60" height="40" rx="4" /></clipPath>
+    <g clip-path="url(#gb-c)">
+      <rect width="60" height="40" fill="#012169" />
+      <path d="M0 0 60 40M60 0 0 40" stroke="#fff" stroke-width="8" />
+      <path d="M0 0 60 40M60 0 0 40" stroke="#C8102E" stroke-width="3" />
+      <path d="M30 0v40M0 20h60" stroke="#fff" stroke-width="12" />
+      <path d="M30 0v40M0 20h60" stroke="#C8102E" stroke-width="7" />
+    </g>
+  </svg>
+) : (
+  <svg class="bandeira" width={tam} height={altura} viewBox="0 0 60 40" aria-hidden="true">
+    <clipPath id="es-c"><rect width="60" height="40" rx="4" /></clipPath>
+    <g clip-path="url(#es-c)">
+      <rect width="60" height="40" fill="#AA151B" />
+      <rect y="10" width="60" height="20" fill="#F1BF00" />
+    </g>
+  </svg>
+)}
