@@ -1,0 +1,26 @@
+---
+import Base from '../layouts/Base.astro';
+import TopoPagina from '../components/TopoPagina.astro';
+import Icone from '../components/Icone.astro';
+import Oferta from '../components/home/Oferta.astro';
+import { LINKS } from '../lib/config';
+---
+<Base atual="contribua" titulo="Contribua · Peniel Church" descricao="Contribua com a obra da Peniel Church. Pagamento seguro processado pelo Stripe.">
+  <TopoPagina sobretitulo="Contribua" titulo="Contribua com a obra" lead="“Cada um deve dar segundo propôs no seu coração, não com tristeza ou por necessidade; porque Deus ama ao que dá com alegria.” — 2 Coríntios 9:7" />
+
+  <section class="secao" id="oferta">
+    <div class="wrap contribua" style="padding-top:0">
+      <div class="contribua-texto">
+        <h2>Para onde vai a sua oferta</h2>
+        <p>Sua oferta contribui com a manutenção da igreja, com missões e com quem bate à nossa porta precisando de ajuda. É o que mantém as portas abertas e o trabalho seguindo durante a semana, dentro e fora daqui.</p>
+        <p>O pagamento é processado pelo Stripe, com cartão, Apple Pay ou Google Pay. A Peniel não guarda nenhum dado do seu cartão.</p>
+        <div class="garantias">
+          <span><Icone nome="cadeado" tam={16} cor="#27AE60" traco={2} /> Conexão segura</span>
+          <span><Icone nome="escudo" tam={16} cor="#27AE60" traco={2} /> Pagamento processado pelo Stripe</span>
+        </div>
+        <p style="font-size:15px">Prefere contribuir pelo celular? A mesma oferta está no <a href={LINKS.app}>app da Peniel</a>, na aba Oferta.</p>
+      </div>
+      <Oferta />
+    </div>
+  </section>
+</Base>

@@ -1,0 +1,18 @@
+---
+// Endereços do site antigo (WordPress) que apontam para páginas novas.
+// Página estática: meta refresh + link, e canonical para o destino.
+interface Props { para: string }
+const { para } = Astro.props;
+const destino = new URL(para, Astro.site).href;
+---
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <title>Redirecionando…</title>
+  <meta http-equiv="refresh" content={`0; url=${para}`} />
+  <link rel="canonical" href={destino} />
+  <meta name="robots" content="noindex" />
+</head>
+<body><p>Esta página mudou de endereço: <a href={para}>{destino}</a></p></body>
+</html>

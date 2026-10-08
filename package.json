@@ -12,6 +12,7 @@
     "build:offline": "PENIEL_FIXTURES=1 astro build"
   },
   "dependencies": {
-    "astro": "^5.18.2"
+    "astro": "^5.18.2",
+    "qrcode": "^1.5.4"
   }
 }

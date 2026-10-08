@@ -1,0 +1,14 @@
+---
+// Faixa azul no topo de cada página interna.
+interface Props { sobretitulo?: string; titulo: string; lead?: string; lang?: string }
+const { sobretitulo, titulo, lead, lang } = Astro.props;
+---
+<section class="pagina-topo" lang={lang}>
+  <div class="wrap">
+    <slot name="antes" />
+    {sobretitulo && <span class="sobretitulo">{sobretitulo}</span>}
+    <h1>{titulo}</h1>
+    {lead && <p>{lead}</p>}
+    <slot />
+  </div>
+</section>

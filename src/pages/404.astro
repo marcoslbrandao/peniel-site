@@ -1,0 +1,16 @@
+---
+import Base from '../layouts/Base.astro';
+import Icone from '../components/Icone.astro';
+import { rota } from '../lib/rotas';
+---
+<Base titulo="Página não encontrada · Peniel Church">
+  <section class="wrap erro-404">
+    <b>404</b>
+    <h1 class="secao-titulo">Esta página não existe</h1>
+    <p class="secao-sub">O endereço pode ter mudado com o site novo. Comece pela página inicial ou veja a agenda.</p>
+    <div class="hero-botoes" style="justify-content:center">
+      <a class="btn btn-navy" href={rota()}>Página inicial <Icone nome="seta" tam={16} traco={2.2} /></a>
+      <a class="btn btn-claro" href={rota('agenda')}>Agenda</a>
+    </div>
+  </section>
+</Base>

@@ -1,0 +1,49 @@
+---
+import Base from '../../layouts/Base.astro';
+import TopoPagina from '../../components/TopoPagina.astro';
+import Icone from '../../components/Icone.astro';
+import CtaFinal from '../../components/CtaFinal.astro';
+import { rota } from '../../lib/rotas';
+import { todasMensagens, dataBR, blocos, resumir, slugMensagem, type MensagemCompleta } from '../../lib/dados';
+
+// Uma página por mensagem, gerada no build a partir da tabela `mensagens`.
+export async function getStaticPaths() {
+  const todas = await todasMensagens();
+  return todas.map((m, i) => ({
+    params: { slug: slugMensagem(m) },
+    props: { m, anterior: todas[i + 1] ?? null, proxima: todas[i - 1] ?? null },
+  }));
+}
+
+interface Props { m: MensagemCompleta; anterior: MensagemCompleta | null; proxima: MensagemCompleta | null }
+const { m, anterior, proxima } = Astro.props;
+---
+<Base atual="mensagens" titulo={`${m.titulo} · Peniel Church`} descricao={resumir(m.resumo, 155)}>
+  <TopoPagina sobretitulo={`${dataBR(m.data)} · ${m.autor}`} titulo={m.titulo}>
+    <a slot="antes" class="voltar" href={rota('mensagens')}><Icone nome="seta" tam={16} traco={2.2} /> Todas as mensagens</a>
+  </TopoPagina>
+
+  <section class="secao">
+    <div class="wrap duas-colunas">
+      <article class="texto-longo">
+        {m.imagem_url && <img class="artigo-capa" src={m.imagem_url} alt="" />}
+        <p style="font-size:19px;color:#1A1A2E;font-weight:500">{m.resumo}</p>
+        {blocos(m.conteudo).map((b) => (b.tipo === 'h' ? <h4>{b.texto}</h4> : <p>{b.texto}</p>))}
+      </article>
+      <aside class="lateral">
+        {proxima && (
+          <a class="cartao" href={rota(`mensagens/${slugMensagem(proxima)}`)} style="color:inherit">
+            <span class="rotulo">Mensagem seguinte</span><h3>{proxima.titulo}</h3><span class="meta">{dataBR(proxima.data)}</span>
+          </a>
+        )}
+        {anterior && (
+          <a class="cartao" href={rota(`mensagens/${slugMensagem(anterior)}`)} style="color:inherit">
+            <span class="rotulo">Mensagem anterior</span><h3>{anterior.titulo}</h3><span class="meta">{dataBR(anterior.data)}</span>
+          </a>
+        )}
+      </aside>
+    </div>
+  </section>
+
+  <CtaFinal />
+</Base>

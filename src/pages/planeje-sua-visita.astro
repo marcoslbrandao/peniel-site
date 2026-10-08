@@ -1,0 +1,117 @@
+---
+import Base from '../layouts/Base.astro';
+import TopoPagina from '../components/TopoPagina.astro';
+import Icone from '../components/Icone.astro';
+import Bandeira from '../components/Bandeira.astro';
+import { rota } from '../lib/rotas';
+import { LINKS } from '../lib/config';
+import { encontrosDaSemana } from '../lib/dados';
+import { cartoes } from '../lib/encontros';
+import { proximoDomingo } from '../lib/datas';
+
+const semana = cartoes(await encontrosDaSemana());
+---
+<Base atual="planeje-sua-visita" titulo="Planeje sua visita · Peniel Church" descricao="Tudo o que você precisa saber antes do primeiro domingo na Peniel Church: horário, endereço, estacionamento, crianças e tradução ao vivo.">
+  <TopoPagina sobretitulo="Planeje sua visita" titulo="Seu primeiro domingo na Peniel" lead="Chegar numa igreja onde você não conhece ninguém é desconfortável. A gente sabe — boa parte de nós já passou por isso ao mudar de país. Aqui está tudo o que você precisa saber para chegar tranquilo.">
+    <div class="hero-botoes">
+      <a class="btn btn-dourado" href={LINKS.mapa} rel="noopener"><Icone nome="pino" tam={17} traco={2} /> Abrir no Google Maps</a>
+      <a class="btn btn-vidro" href={rota('contato')}>Fale com alguém antes de vir</a>
+    </div>
+  </TopoPagina>
+
+  <section class="secao">
+    <div class="wrap duas-colunas">
+      <div class="primeira-grade" style="gap:34px 40px">
+        <div class="dica">
+          <Icone nome="relogio" tam={24} cor="#1A1740" traco={1.7} />
+          <div>
+            <h4>Que horas chegar</h4>
+            <p>O culto é das <strong>18h às 20h</strong>. Chegue uns 15 minutos antes — dá tempo de ser recebido e de achar um lugar sem pressa.</p>
+          </div>
+        </div>
+        <div class="dica">
+          <Icone nome="pino" tam={24} cor="#1A1740" traco={1.7} />
+          <div>
+            <h4>Onde é</h4>
+            <p><strong>Abbey Square, Reading, RG1 3BE.</strong> <a href={LINKS.mapa} rel="noopener">Ver no mapa</a>.</p>
+          </div>
+        </div>
+        <div class="dica">
+          <Icone nome="estacionamento" tam={24} cor="#1A1740" traco={1.7} />
+          <div>
+            <h4>Estacionamento</h4>
+            <p>Temos poucas vagas na igreja, mas há dois estacionamentos a 5 minutos a pé: <a href={LINKS.estacionamentoHorseBarge} rel="noopener">Horse and Barge</a> e <a href={LINKS.estacionamentoQueensRoad} rel="noopener">Queens Road</a>.</p>
+          </div>
+        </div>
+        <div class="dica">
+          <Icone nome="familia" tam={24} cor="#1A1740" traco={1.7} />
+          <div>
+            <h4>Crianças</h4>
+            <p>Temos ministério infantil. Pode vir com as crianças — elas têm o espaço delas aqui.</p>
+          </div>
+        </div>
+        <div class="dica">
+          <Icone nome="balao" tam={24} cor="#1A1740" traco={1.7} />
+          <div>
+            <h4>Em que língua</h4>
+            <p>O culto é em português, com tradução ao vivo para inglês e espanhol pelo app. <a href={rota('live-translation')}>Como funciona</a>.</p>
+          </div>
+        </div>
+        <div class="dica">
+          <Icone nome="play" tam={24} cor="#1A1740" traco={1.7} />
+          <div>
+            <h4>Não dá para vir?</h4>
+            <p>O culto de domingo é transmitido ao vivo no <a href={LINKS.youtubeAoVivo} rel="noopener">YouTube</a>. Assista de casa e venha quando puder.</p>
+          </div>
+        </div>
+      </div>
+
+      <aside class="lateral">
+        <div class="cartao">
+          <span class="rotulo">Próximo culto</span>
+          <h3 style="font-size:24px">Domingo, 18h</h3>
+          <span class="data-culto" data-proximo-domingo>{proximoDomingo()}</span>
+          <div class="linha"></div>
+          <div class="info">
+            <Icone nome="pino" tam={19} cor="#534AB7" traco={1.7} />
+            <div><strong>Abbey Square</strong><span>Reading, RG1 3BE</span></div>
+          </div>
+          <a class="btn btn-navy" href={LINKS.mapa} rel="noopener">Como chegar <Icone nome="seta" tam={16} traco={2.2} /></a>
+        </div>
+        <div class="cartao" lang="en">
+          <p style="display:flex;gap:10px"><Bandeira pais="gb" /><span><strong style="color:#1A1A2E">Visiting from abroad?</strong> You can follow the whole service in English with live translation in our app.</span></p>
+          <p style="display:flex;gap:10px" lang="es"><Bandeira pais="es" /><span><strong style="color:#1A1A2E">¿Nos visitas?</strong> Puedes seguir todo el culto en español con la traducción en vivo de nuestra app.</span></p>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <section class="secao" aria-labelledby="semana-titulo" style="padding-bottom:84px">
+    <div class="wrap">
+      <div class="cabeca-secao">
+        <div>
+          <h2 class="secao-titulo" id="semana-titulo">Durante a semana</h2>
+          <p class="secao-sub">Depois do domingo, a igreja continua junta.</p>
+        </div>
+        <a class="link-seta" href={rota('agenda')}>Ver a agenda completa <Icone nome="seta" tam={16} traco={2.2} /></a>
+      </div>
+      <div class="semana">
+        {semana.map((c) => (
+          <article class="cartao encontro">
+            <div class="encontro-topo">
+              <span class="encontro-dia">{c.dia}</span>
+              <span class={`selo ${c.selo.classe}`}>{c.selo.rotulo}</span>
+            </div>
+            <div><h3>{c.titulo}</h3><span class="encontro-quando">{c.quando}</span></div>
+            <p>{c.convite}</p>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+</Base>
+
+<script>
+  import { proximoDomingo } from '../lib/datas';
+  document.querySelectorAll('[data-proximo-domingo]').forEach((el) => (el.textContent = proximoDomingo()));
+</script>

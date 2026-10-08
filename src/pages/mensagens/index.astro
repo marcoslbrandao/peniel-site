@@ -1,0 +1,41 @@
+---
+import Base from '../../layouts/Base.astro';
+import TopoPagina from '../../components/TopoPagina.astro';
+import Icone from '../../components/Icone.astro';
+import CtaFinal from '../../components/CtaFinal.astro';
+import { rota } from '../../lib/rotas';
+import { LINKS } from '../../lib/config';
+import { todasMensagens, dataBR, resumir, slugMensagem } from '../../lib/dados';
+
+const mensagens = await todasMensagens();
+---
+<Base atual="mensagens" titulo="Mensagens · Peniel Church" descricao="O resumo escrito das pregações de domingo da Peniel Church, em Reading.">
+  <TopoPagina sobretitulo="Mensagens" titulo="A Palavra de domingo, para ler durante a semana" lead="O resumo escrito das pregações do culto. Publicadas pelo app, aparecem aqui ao mesmo tempo.">
+    <div class="hero-botoes">
+      <a class="btn btn-vidro" href={LINKS.youtube} rel="noopener"><Icone nome="play" tam={17} traco={1.9} /> Assistir aos cultos no YouTube</a>
+    </div>
+  </TopoPagina>
+
+  <section class="secao">
+    <div class="wrap">
+      {mensagens.length ? (
+        <div class="grade-mensagens">
+          {mensagens.map((m) => (
+            <a class="cartao card-mensagem" href={rota(`mensagens/${slugMensagem(m)}`)}>
+              <div class="capa">{m.imagem_url ? <img src={m.imagem_url} alt="" loading="lazy" /> : <Icone nome="documento" tam={30} traco={1.5} />}</div>
+              <div class="corpo">
+                <span class="meta">{dataBR(m.data)} · {m.autor}</span>
+                <h2>{m.titulo}</h2>
+                <p>{resumir(m.resumo, 170)}</p>
+              </div>
+            </a>
+          ))}
+        </div>
+      ) : (
+        <div class="cartao vazio">As mensagens de domingo aparecem aqui assim que forem publicadas pelo app. Enquanto isso, <a href={LINKS.youtube} rel="noopener">assista aos cultos no YouTube</a>.</div>
+      )}
+    </div>
+  </section>
+
+  <CtaFinal />
+</Base>

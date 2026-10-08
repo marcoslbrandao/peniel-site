@@ -19,7 +19,8 @@ const ano = new Date().getFullYear();
           <h4>A igreja</h4>
           <a href={rota('sobre')}>Sobre nós</a>
           <a href={rota('sobre#no-que-cremos')}>No que cremos</a>
-          <a href={rota('sobre#pastores')}>Liderança</a>
+          <a href={rota('sobre#pastores')}>Pastores</a>
+          <a href={rota('planeje-sua-visita')}>Planeje sua visita</a>
           <a href={rota('contato')}>Contato</a>
         </div>
         <div>
@@ -34,7 +35,7 @@ const ano = new Date().getFullYear();
           <a href={LINKS.youtube} rel="noopener">YouTube</a>
           <a href={LINKS.instagram} rel="noopener">Instagram</a>
           <a href={LINKS.facebook} rel="noopener">Facebook</a>
-          <a href={LINKS.app}>Baixar o app</a>
+          <a href={rota('o-app')}>O app</a>
         </div>
       </div>
     </div>
@@ -43,7 +44,7 @@ const ano = new Date().getFullYear();
       <span>© {ano} Peniel Church · Reading, Reino Unido</span>
       <nav aria-label="Rodapé">
         <a href={rota('politica-de-privacidade')}>Política de Privacidade</a>
-        <a href={rota('#live-translation')} lang="en">English</a>
+        <a href={rota('live-translation')} lang="en">English · Español</a>
       </nav>
     </div>
   </div>

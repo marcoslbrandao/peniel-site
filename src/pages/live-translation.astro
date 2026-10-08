@@ -1,0 +1,75 @@
+---
+import Base from '../layouts/Base.astro';
+import Bandeira from '../components/Bandeira.astro';
+import Icone from '../components/Icone.astro';
+import { rota } from '../lib/rotas';
+import { LINKS } from '../lib/config';
+
+// Página para quem NÃO fala português: inglês e espanhol, lado a lado.
+const LINGUAS = [
+  {
+    lang: 'en', pais: 'gb' as const, titulo: 'Our service is in Portuguese. You can still follow every word.',
+    lead: 'Peniel Church is a Brazilian church in the heart of Reading. Every Sunday at 6pm the service is interpreted live into English and Spanish, straight to your phone.',
+    passos: [
+      ['Get the app', 'Download the free Peniel Church app. No account needed.'],
+      ['Open Live translation', 'During the service, tap the orange “Live translation” button on the home screen.'],
+      ['Put your headphones in', 'Choose English or Spanish and listen as the pastor speaks.'],
+    ],
+    quando: 'Sundays · 6pm to 8pm · Abbey Square, Reading, RG1 3BE',
+    botao: 'Get the app', mapa: 'Get directions', aviso: 'Not in Reading? The service is also streamed live on YouTube.',
+  },
+  {
+    lang: 'es', pais: 'es' as const, titulo: 'Nuestro culto es en portugués. Aun así, puedes seguir cada palabra.',
+    lead: 'Peniel Church es una iglesia brasileña en el centro de Reading. Cada domingo a las 18h el culto se interpreta en vivo al inglés y al español, directo en tu celular.',
+    passos: [
+      ['Descarga la app', 'Descarga gratis la app de Peniel Church. No necesitas crear una cuenta.'],
+      ['Abre Live translation', 'Durante el culto, toca el botón naranja “Live translation” en la pantalla de inicio.'],
+      ['Ponte los auriculares', 'Elige inglés o español y escucha mientras el pastor predica.'],
+    ],
+    quando: 'Domingos · 18h a 20h · Abbey Square, Reading, RG1 3BE',
+    botao: 'Descarga la app', mapa: 'Cómo llegar', aviso: '¿No estás en Reading? El culto también se transmite en vivo por YouTube.',
+  },
+];
+---
+<Base atual="live-translation" titulo="Live translation · Traducción en vivo · Peniel Church" descricao="Peniel Church's Portuguese service is interpreted live into English and Spanish through our free app. Sundays at 6pm, Abbey Square, Reading.">
+  <section class="pagina-topo">
+    <div class="wrap">
+      <span class="sobretitulo">Live translation · Traducción en vivo</span>
+      <h1 lang="en">Welcome. <span lang="es">Bienvenido.</span></h1>
+      <p lang="en">Choose your language below. <span lang="es">Elige tu idioma abajo.</span></p>
+      <div class="hero-botoes">
+        <a class="btn btn-dourado" href="#en" lang="en"><Bandeira pais="gb" /> English</a>
+        <a class="btn btn-vidro" href="#es" lang="es"><Bandeira pais="es" /> Español</a>
+      </div>
+    </div>
+  </section>
+
+  {LINGUAS.map((l) => (
+    <section class="secao" id={l.lang} lang={l.lang}>
+      <div class="wrap">
+        <div class="cabeca-secao">
+          <div>
+            <span style="display:flex;align-items:center;gap:12px"><Bandeira pais={l.pais} tam={30} /><h2 class="secao-titulo">{l.titulo}</h2></span>
+            <p class="secao-sub" style="max-width:760px;margin-top:6px">{l.lead}</p>
+          </div>
+        </div>
+        <ol class="passos">
+          {l.passos.map(([t, p]) => <li class="cartao"><h3>{t}</h3><p>{p}</p></li>)}
+        </ol>
+        <div class="cartao" style="margin-top:18px;padding:24px 28px;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:16px">
+          <div class="info"><Icone nome="relogio" tam={20} cor="#534AB7" traco={1.7} /><div><strong>{l.quando}</strong><span>{l.aviso} <a href={LINKS.youtubeAoVivo} rel="noopener">YouTube</a></span></div></div>
+          <div style="display:flex;gap:10px;flex-wrap:wrap">
+            <a class="btn btn-navy btn-pequeno" href={LINKS.app}>{l.botao} <Icone nome="seta" tam={15} traco={2.2} /></a>
+            <a class="btn btn-claro btn-pequeno" href={LINKS.mapa} rel="noopener">{l.mapa}</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  ))}
+
+  <section class="secao" style="padding-bottom:84px">
+    <div class="wrap">
+      <p class="secao-sub"><a href={rota()}>Peniel Church · Página inicial em português</a></p>
+    </div>
+  </section>
+</Base>

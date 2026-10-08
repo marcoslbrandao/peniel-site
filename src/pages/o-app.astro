@@ -1,0 +1,74 @@
+---
+import Base from '../layouts/Base.astro';
+import TopoPagina from '../components/TopoPagina.astro';
+import Icone from '../components/Icone.astro';
+import QRCode from 'qrcode';
+import { LINKS, GOOGLE_PLAY_NO_AR } from '../lib/config';
+
+// QR gerado no build, apontando para o link único (o mesmo do QR impresso).
+const qr = await QRCode.toString(LINKS.app, { type: 'svg', errorCorrectionLevel: 'M', margin: 0, color: { dark: '#1A1740', light: '#FFFFFF' } });
+
+const ABERTO = [
+  { icone: 'livro', titulo: 'Bíblia em vários idiomas', texto: 'Várias versões da Bíblia, com versículos para marcar e compartilhar.' },
+  { icone: 'documento', titulo: 'Devocional Peniel', texto: 'Uma palavra nova toda segunda, quarta e sexta, com notificação logo cedo.' },
+  { icone: 'calendario', titulo: 'Agenda e avisos', texto: 'Os encontros da semana, os eventos especiais e os avisos da igreja, sempre atualizados.' },
+  { icone: 'fone', titulo: 'Tradução ao vivo', texto: 'Acompanhe o culto em inglês ou espanhol, com fone, enquanto o pastor fala.' },
+  { icone: 'play', titulo: 'Ao vivo e vídeos', texto: 'Assista ao culto ao vivo, às mensagens e aos shorts da igreja.' },
+  { icone: 'cadeado', titulo: 'Oferta segura', texto: 'Contribua em segundos com cartão, Apple Pay ou Google Pay.' },
+];
+const MEMBRO = [
+  { icone: 'balao', titulo: 'Grupos e chats', texto: 'Mulheres, Homens, Peniel Alive e Estudo Bíblico, cada um com seu espaço.' },
+  { icone: 'familia', titulo: 'Escalas de serviço', texto: 'Quem serve em cada culto, com confirmação de presença pelo app.' },
+  { icone: 'pessoa', titulo: 'Seu cadastro', texto: 'Seus dados e os da sua família num lugar só, sempre atualizados.' },
+];
+---
+<Base atual="o-app" titulo="O app · Peniel Church" descricao="Baixe o app da Peniel Church: Bíblia em 4 idiomas, devocionais, agenda, tradução ao vivo do culto e oferta segura.">
+  <TopoPagina sobretitulo="O app da Peniel" titulo="O site é a porta. O app é a casa." lead="Quem faz parte da Peniel vive a semana pelo app. Mas não é preciso ser membro para usar: a Bíblia, os devocionais, a agenda e os avisos estão abertos a qualquer pessoa. Baixar é de graça.">
+    <div class="lojas">
+      <a class="loja loja-ativa" href={LINKS.appStore} rel="noopener">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="#1A1542" aria-hidden="true"><path d="M16.4 12.7c0-2 1.6-3 1.7-3-.9-1.4-2.4-1.5-2.9-1.6-1.2-.1-2.4.7-3 .7s-1.6-.7-2.6-.7c-1.3 0-2.6.8-3.3 2-1.4 2.4-.4 6 1 8 .7 1 1.5 2 2.5 2 1 0 1.4-.6 2.6-.6s1.5.6 2.6.6 1.7-1 2.4-2c.7-1.1 1-2.2 1-2.3 0 0-1.9-.7-2-3.1ZM14.5 6.3c.5-.7.9-1.6.8-2.5-.8 0-1.8.5-2.4 1.2-.5.6-1 1.6-.8 2.5.9.1 1.8-.4 2.4-1.2Z"/></svg>
+        <span><small>Baixar na</small><b>App Store</b></span>
+      </a>
+      {GOOGLE_PLAY_NO_AR ? (
+        <a class="loja loja-ativa" href={LINKS.googlePlay} rel="noopener"><Icone nome="googleplay" tam={22} cor="#1A1542" /><span><small>Disponível no</small><b>Google Play</b></span></a>
+      ) : (
+        <span class="loja loja-embreve"><Icone nome="googleplay" tam={22} cor="rgba(255,255,255,0.55)" traco={1.7} /><span><small>Google Play</small><b>Em breve</b></span></span>
+      )}
+    </div>
+  </TopoPagina>
+
+  <section class="secao" aria-labelledby="aberto-titulo">
+    <div class="wrap">
+      <div class="cabeca-secao"><div><h2 class="secao-titulo" id="aberto-titulo">Aberto a qualquer pessoa</h2><p class="secao-sub">Sem cadastro, sem senha.</p></div></div>
+      <div class="recursos-grade">
+        {ABERTO.map((r) => (
+          <div class="cartao recurso"><div class="icone"><Icone nome={r.icone} tam={22} traco={1.7} /></div><h3>{r.titulo}</h3><p>{r.texto}</p></div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="secao" aria-labelledby="membro-titulo">
+    <div class="wrap">
+      <div class="cabeca-secao"><div><h2 class="secao-titulo" id="membro-titulo">Na Área do Membro</h2><p class="secao-sub">Para quem já faz parte da igreja.</p></div></div>
+      <div class="recursos-grade">
+        {MEMBRO.map((r) => (
+          <div class="cartao recurso"><div class="icone"><Icone nome={r.icone} tam={22} traco={1.7} /></div><h3>{r.titulo}</h3><p>{r.texto}</p></div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="secao" style="padding-bottom:84px">
+    <div class="wrap">
+      <div class="cta-final">
+        <div>
+          <h2>Aponte a câmera e baixe</h2>
+          <p>O mesmo QR do material impresso da igreja. No iPhone abre a App Store; no Android, o Google Play.</p>
+          <p style="margin-top:14px"><a href={LINKS.app} style="color:#F5C842;font-weight:700">app.penielchurch.org.uk</a></p>
+        </div>
+        <div class="qr" aria-label="QR code para baixar o app" role="img" set:html={qr} />
+      </div>
+    </div>
+  </section>
+</Base>

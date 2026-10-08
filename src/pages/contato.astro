@@ -1,0 +1,94 @@
+---
+import Base from '../layouts/Base.astro';
+import TopoPagina from '../components/TopoPagina.astro';
+import Icone from '../components/Icone.astro';
+import { LINKS, SUPABASE_URL, SUPABASE_ANON_KEY } from '../lib/config';
+---
+<Base atual="contato" titulo="Contato · Peniel Church" descricao="Fale com a Peniel Church. A mensagem chega direto para a liderança da igreja.">
+  <TopoPagina sobretitulo="Contato" titulo="Fale com a gente" lead="Uma dúvida antes da primeira visita, um pedido de oração ou só um oi. A mensagem chega direto para a liderança da igreja, e alguém responde." />
+
+  <section class="secao" style="padding-bottom:84px">
+    <div class="wrap duas-colunas">
+      <form class="cartao formulario" data-contato data-url={`${SUPABASE_URL}/rest/v1/contact_messages`} data-chave={SUPABASE_ANON_KEY} novalidate>
+        <div class="campo">
+          <label for="nome">Seu nome</label>
+          <input id="nome" name="nome" autocomplete="name" required maxlength="120" />
+        </div>
+        <div class="campo">
+          <label for="email">Seu e-mail</label>
+          <input id="email" name="email" type="email" autocomplete="email" required maxlength="160" />
+          <small>Só para podermos responder. Não enviamos propaganda.</small>
+        </div>
+        <div class="campo">
+          <label for="mensagem">Mensagem</label>
+          <textarea id="mensagem" name="mensagem" required maxlength="4000"></textarea>
+        </div>
+        <!-- Armadilha para robôs: pessoas não veem este campo. -->
+        <div class="armadilha" aria-hidden="true"><label for="site">Site</label><input id="site" name="site" tabindex="-1" autocomplete="off" /></div>
+        <p class="form-status" data-status hidden role="status"></p>
+        <button class="btn btn-navy" type="submit" data-enviar>Enviar mensagem <Icone nome="seta" tam={16} traco={2.2} /></button>
+      </form>
+
+      <aside class="lateral">
+        <div class="cartao">
+          <div class="info"><Icone nome="email" tam={20} cor="#534AB7" traco={1.7} /><div><strong><a href={`mailto:${LINKS.email}`} style="color:inherit">{LINKS.email}</a></strong><span>Prefere e-mail? Escreva direto.</span></div></div>
+          <div class="info"><Icone nome="pino" tam={20} cor="#534AB7" traco={1.7} /><div><strong>Abbey Square</strong><span>Reading, RG1 3BE · Reino Unido</span></div></div>
+          <div class="info"><Icone nome="relogio" tam={20} cor="#534AB7" traco={1.7} /><div><strong>Culto aos domingos, 18h</strong><span>A melhor hora para conversar pessoalmente</span></div></div>
+        </div>
+        <div class="cartao">
+          <h3>Nas redes</h3>
+          <a class="link-seta" href={LINKS.instagram} rel="noopener">Instagram</a>
+          <a class="link-seta" href={LINKS.youtube} rel="noopener">YouTube</a>
+          <a class="link-seta" href={LINKS.facebook} rel="noopener">Facebook</a>
+        </div>
+      </aside>
+    </div>
+  </section>
+</Base>
+
+<script>
+  // Grava em `contact_messages` (RLS: qualquer um pode inserir, só admin/líder
+  // lê) — a mensagem aparece na aba Contato do Painel Admin do app.
+  // Defesas contra robô: campo-armadilha, tempo mínimo de preenchimento e um
+  // envio por vez neste navegador a cada 60 s.
+  const form = document.querySelector<HTMLFormElement>('[data-contato]');
+  if (form) {
+    const abertoEm = Date.now();
+    const status = form.querySelector<HTMLElement>('[data-status]')!;
+    const botao = form.querySelector<HTMLButtonElement>('[data-enviar]')!;
+    const mostra = (texto: string, tipo: 'ok' | 'erro') => { status.textContent = texto; status.className = `form-status ${tipo}`; status.hidden = false; };
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const dados = new FormData(form);
+      const nome = String(dados.get('nome') || '').trim();
+      const email = String(dados.get('email') || '').trim();
+      const mensagem = String(dados.get('mensagem') || '').trim();
+
+      if (dados.get('site')) return mostra('Mensagem enviada. Obrigado!', 'ok'); // robô: finge que foi
+      if (!nome || !mensagem) return mostra('Preencha seu nome e a mensagem.', 'erro');
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return mostra('Confira o seu e-mail: precisamos dele para responder.', 'erro');
+      if (Date.now() - abertoEm < 3000) return mostra('Só um instante… tente de novo.', 'erro');
+      let ultimo = 0;
+      try { ultimo = Number(localStorage.getItem('peniel-contato') || 0); } catch {}
+      if (Date.now() - ultimo < 60_000) return mostra('Sua mensagem anterior acabou de ser enviada. Aguarde um minuto para mandar outra.', 'erro');
+
+      botao.disabled = true;
+      try {
+        const r = await fetch(form.dataset.url!, {
+          method: 'POST',
+          headers: { apikey: form.dataset.chave!, Authorization: `Bearer ${form.dataset.chave}`, 'Content-Type': 'application/json', Prefer: 'return=minimal' },
+          body: JSON.stringify({ nome, email, mensagem }),
+        });
+        if (!r.ok) throw new Error(String(r.status));
+        try { localStorage.setItem('peniel-contato', String(Date.now())); } catch {}
+        form.reset();
+        mostra('Mensagem enviada! Alguém da liderança vai responder no seu e-mail.', 'ok');
+      } catch {
+        mostra('Não conseguimos enviar agora. Tente de novo ou escreva para info@penielchurch.org.uk.', 'erro');
+      } finally {
+        botao.disabled = false;
+      }
+    });
+  }
+</script>

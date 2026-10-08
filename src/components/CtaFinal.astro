@@ -1,0 +1,24 @@
+---
+import Icone from './Icone.astro';
+import { rota } from '../lib/rotas';
+import { LINKS } from '../lib/config';
+interface Props { titulo?: string; texto?: string }
+const {
+  titulo = 'Venha nos visitar neste domingo',
+  texto = 'Culto às 18h em Abbey Square, Reading. Não precisa avisar — é só chegar.',
+} = Astro.props;
+---
+<section class="secao" style="padding-bottom:84px">
+  <div class="wrap">
+    <div class="cta-final">
+      <div>
+        <h2>{titulo}</h2>
+        <p>{texto}</p>
+      </div>
+      <div class="hero-botoes">
+        <a class="btn btn-dourado" href={rota('planeje-sua-visita')}>Planeje sua visita <Icone nome="seta" tam={17} traco={2.2} /></a>
+        <a class="btn btn-vidro" href={LINKS.app}><Icone nome="celular" tam={17} /> Baixar o app</a>
+      </div>
+    </div>
+  </div>
+</section>

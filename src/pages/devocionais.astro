@@ -1,0 +1,70 @@
+---
+import Base from '../layouts/Base.astro';
+import TopoPagina from '../components/TopoPagina.astro';
+import Icone from '../components/Icone.astro';
+import CtaFinal from '../components/CtaFinal.astro';
+import { devocionais, dataBR, blocos } from '../lib/dados';
+
+// O mesmo "Devocional Peniel" da Home do app (grupo nulo). O mais recente
+// aparece aberto; os anteriores ficam numa lista que abre ao tocar.
+const lista = await devocionais(60);
+const [atual, ...anteriores] = lista;
+---
+<Base atual="devocionais" titulo="Devocionais · Peniel Church" descricao="O Devocional Peniel: uma palavra para o seu dia, toda segunda, quarta e sexta.">
+  <TopoPagina sobretitulo="Devocional Peniel" titulo="Uma palavra para o seu dia" lead="Toda segunda, quarta e sexta sai um devocional novo, aqui e no app ao mesmo tempo." />
+
+  {atual ? (
+    <section class="secao" id={`d-${atual.id}`}>
+      <div class="wrap duas-colunas">
+        <article class="texto-longo">
+          {atual.imagem_url && <img class="artigo-capa" style="aspect-ratio:2/1" src={atual.imagem_url} alt="" />}
+          <span class="meta" style="font-weight:600">{dataBR(atual.data)}</span>
+          <h2 style="margin-top:-6px">{atual.titulo}</h2>
+          <blockquote class="versiculo-destaque"><p>“{atual.versiculo}”</p><cite>{atual.referencia}</cite></blockquote>
+          {blocos(atual.texto).map((b) => (b.tipo === 'h' ? <h4>{b.texto}</h4> : <p>{b.texto}</p>))}
+        </article>
+        <aside class="lateral">
+          <div class="cartao">
+            <h3>Receba no celular</h3>
+            <p>No app, o devocional chega com uma notificação logo cedo, e você pode compartilhar com quem precisa.</p>
+            <a class="btn btn-navy" href="https://app.penielchurch.org.uk"><Icone nome="celular" tam={16} /> Baixar o app</a>
+          </div>
+        </aside>
+      </div>
+    </section>
+  ) : (
+    <section class="secao"><div class="wrap"><div class="cartao vazio">Os devocionais aparecem aqui assim que forem publicados pelo app.</div></div></section>
+  )}
+
+  {anteriores.length > 0 && (
+    <section class="secao" aria-labelledby="anteriores-titulo">
+      <div class="wrap">
+        <div class="cabeca-secao"><div><h2 class="secao-titulo" id="anteriores-titulo">Devocionais anteriores</h2></div></div>
+        <div class="arquivo">
+          {anteriores.map((d) => (
+            <details id={`d-${d.id}`}>
+              <summary>
+                <span class="meta">{dataBR(d.data)}</span>
+                <div><h3>{d.titulo}</h3><small>{d.referencia}</small></div>
+                <Icone nome="seta" tam={18} traco={2.2} />
+              </summary>
+              <div class="aberto texto-longo">
+                {d.imagem_url && <img src={d.imagem_url} alt="" loading="lazy" />}
+                <blockquote class="versiculo-destaque"><p>“{d.versiculo}”</p><cite>{d.referencia}</cite></blockquote>
+                {blocos(d.texto).map((b) => (b.tipo === 'h' ? <h4>{b.texto}</h4> : <p>{b.texto}</p>))}
+              </div>
+            </details>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+
+  <CtaFinal />
+</Base>
+
+<script>
+  // Link vindo da Home (#d-<id>) abre o devocional certo, mesmo se for um antigo.
+  const alvo = location.hash && document.querySelector<HTMLElement>(location.hash);
+  if (alvo instanceof HTMLDetailsElement) { alvo.open = true; alvo.scrollIntoView(); }
+</script>

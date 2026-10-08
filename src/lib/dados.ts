@@ -130,3 +130,75 @@ export function resumir(texto: string, max = 220): string {
   if (t.length <= max) return t;
   return t.slice(0, t.lastIndexOf(' ', max)).replace(/[,.;:!?-]+$/, '') + '…';
 }
+
+// ─── Consultas das páginas internas ─────────────────────────────────────────
+
+export type EventoCompleto = Evento & {
+  link_zoom: string | null;
+  map_url: string | null;
+  especial: boolean;
+  cor: string | null;
+  cta_texto: string | null;
+  cta_url: string | null;
+  imagem_url: string | null;
+};
+
+/** Agenda inteira: recorrentes + eventos com data (de hoje em diante). */
+export async function agendaCompleta(): Promise<EventoCompleto[]> {
+  const hoje = new Date().toISOString().slice(0, 10);
+  const reserva = (fixtures.encontros as Evento[]).map((e) => ({
+    ...e, link_zoom: null, map_url: null, especial: false, cor: null, cta_texto: null, cta_url: null, imagem_url: null,
+  }));
+  const linhas = await rest<EventoCompleto[]>(
+    `agenda_eventos?select=*&or=(recorrente.eq.true,data.gte.${hoje})&order=recorrente.desc,dia_semana.asc,data.asc`,
+    USAR_FIXTURES ? [...reserva, ...(fixtures.especiais as EventoCompleto[])] : reserva,
+  );
+  return linhas.length ? linhas : reserva;
+}
+
+export type MensagemCompleta = Mensagem & { conteudo: string };
+
+/** Todas as mensagens (blog), com o texto inteiro, para as páginas próprias. */
+export async function todasMensagens(): Promise<MensagemCompleta[]> {
+  return rest<MensagemCompleta[]>(
+    'mensagens?select=id,titulo,resumo,conteudo,imagem_url,autor,data&order=data.desc',
+    USAR_FIXTURES
+      ? (fixtures.mensagens as Mensagem[]).map((m) => ({ ...m, conteudo: `${m.resumo}\n\nEste é um texto de teste. No site de verdade aqui entra o conteúdo completo publicado pelo Painel Admin do app.` }))
+      : [],
+  );
+}
+
+/** Devocionais Peniel (grupo nulo), do mais novo para o mais antigo. */
+export async function devocionais(limite = 60): Promise<Devocional[]> {
+  return rest<Devocional[]>(
+    `devocionais?select=id,titulo,versiculo,referencia,texto,data,imagem_url&grupo=is.null&order=data.desc&limit=${limite}`,
+    USAR_FIXTURES ? (fixtures.devocional as Devocional[]) : [],
+  );
+}
+
+/** Quebra um texto do app em blocos: parágrafos e subtítulos fixos do devocional. */
+export function blocos(texto: string): { tipo: 'p' | 'h'; texto: string }[] {
+  const ROTULOS = /^(Para refletir|Ora[çc][ãa]o|Refer[êe]ncias|Aplica[çc][ãa]o|Desafio)\s*:?\s*/i;
+  const saida: { tipo: 'p' | 'h'; texto: string }[] = [];
+  for (const bruto of texto.replace(/\r/g, '').split(/\n\s*\n/)) {
+    const linhas = bruto.split('\n').map((l) => l.trim()).filter(Boolean);
+    if (!linhas.length) continue;
+    const m = linhas[0].match(ROTULOS);
+    if (m) {
+      saida.push({ tipo: 'h', texto: m[1] });
+      const resto = [linhas[0].slice(m[0].length), ...linhas.slice(1)].join(' ').trim();
+      if (resto) saida.push({ tipo: 'p', texto: resto });
+    } else {
+      saida.push({ tipo: 'p', texto: linhas.join(' ') });
+    }
+  }
+  return saida;
+}
+
+/** Endereço amigável de uma mensagem: "reconstruindo-os-muros-1a2b3c". */
+export function slugMensagem(m: { titulo: string; id: string }): string {
+  const base = m.titulo
+    .normalize('NFD').replace(/[̀-ͯ]/g, '')
+    .toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 60);
+  return `${base || 'mensagem'}-${m.id.replace(/-/g, '').slice(0, 6)}`;
+}

@@ -1,0 +1,92 @@
+---
+import Base from '../layouts/Base.astro';
+import TopoPagina from '../components/TopoPagina.astro';
+import Icone from '../components/Icone.astro';
+import CtaFinal from '../components/CtaFinal.astro';
+import { LINKS } from '../lib/config';
+import { agendaCompleta, proximoEstudo, dataBR, horaCurta, DIAS } from '../lib/dados';
+import { cartoes } from '../lib/encontros';
+import { diaMes } from '../lib/datas';
+
+// Tudo vem de `agenda_eventos`: o que o Admin do app muda, muda aqui.
+const [eventos, estudoISO] = await Promise.all([agendaCompleta(), proximoEstudo()]);
+const recorrentes = eventos.filter((e) => e.recorrente && e.dia_semana !== null);
+const apresentacao = new Map(cartoes(recorrentes).map((c) => [c.id, c]));
+const especiais = eventos.filter((e) => !e.recorrente && e.data);
+const SELO = { presencial: ['Presencial', 'selo-presencial'], online: ['Online', 'selo-online'], casa: ['Nas casas', 'selo-casa'] } as const;
+---
+<Base atual="agenda" titulo="Agenda · Peniel Church" descricao="Culto todo domingo às 18h, oração na terça e estudo bíblico na quarta pelo Zoom, Peniel Alive no sábado, e os eventos especiais da Peniel Church.">
+  <TopoPagina sobretitulo="Agenda" titulo="A semana na Peniel" lead="Quatro encontros por semana, presenciais e online, e os eventos especiais da igreja. Todos abertos a quem quiser chegar." />
+
+  <section class="secao" aria-labelledby="semana-titulo">
+    <div class="wrap">
+      <div class="cabeca-secao"><div><h2 class="secao-titulo" id="semana-titulo">Toda semana</h2></div></div>
+      <div class="lista-agenda">
+        {recorrentes.map((e) => {
+          const c = apresentacao.get(e.id)!;
+          const [rotulo, classe] = SELO[e.tipo] ?? SELO.presencial;
+          const ehEstudo = /estudo/i.test(e.nome);
+          return (
+            <article class="cartao item-agenda">
+              <div class="item-agenda-dia">
+                <b>{DIAS[e.dia_semana!]}</b>
+                <span>{horaCurta(e.horario)}</span>
+              </div>
+              <div>
+                <h3>{c.titulo} <span class={`selo ${classe}`}>{rotulo}</span></h3>
+                <p>{c.convite}</p>
+                <div class="item-agenda-meta">
+                  <span><Icone nome="pino" tam={15} cor="#534AB7" /> {e.local}</span>
+                  {ehEstudo && estudoISO && <span><Icone nome="calendario" tam={15} cor="#534AB7" /> Próximo: {dataBR(estudoISO)}</span>}
+                </div>
+              </div>
+              <div class="acoes">
+                {e.link_zoom && <a class="btn btn-navy btn-pequeno" href={e.link_zoom} rel="noopener">Entrar no Zoom</a>}
+                {e.tipo === 'presencial' && <a class="btn btn-claro btn-pequeno" href={e.map_url && !/\?q=/.test(e.map_url) ? e.map_url : LINKS.mapa} rel="noopener">Como chegar</a>}
+              </div>
+            </article>
+          );
+        })}
+      </div>
+    </div>
+  </section>
+
+  <section class="secao" aria-labelledby="especiais-titulo">
+    <div class="wrap">
+      <div class="cabeca-secao">
+        <div>
+          <h2 class="secao-titulo" id="especiais-titulo">Eventos especiais</h2>
+          <p class="secao-sub">Conferências, retiros e celebrações com data marcada.</p>
+        </div>
+      </div>
+      {especiais.length ? (
+        <div class="lista-agenda">
+          {especiais.map((e) => {
+            const dm = diaMes(e.data!);
+            return (
+              <article class="cartao item-agenda especial" style={`--cor-evento:${e.cor || '#E84B1A'}`}>
+                <div class="data-grande"><b>{dm.dia}</b><span>{dm.mes}</span></div>
+                <div>
+                  <h3>{e.nome}</h3>
+                  {e.descricao && <p>{e.descricao}</p>}
+                  <div class="item-agenda-meta">
+                    <span><Icone nome="calendario" tam={15} cor="#534AB7" /> {dataBR(e.data)} · {horaCurta(e.horario)}</span>
+                    <span><Icone nome="pino" tam={15} cor="#534AB7" /> {e.local}</span>
+                  </div>
+                </div>
+                <div class="acoes">
+                  {e.cta_url && <a class="btn btn-navy btn-pequeno" href={e.cta_url} rel="noopener">{e.cta_texto || 'Saiba mais'}</a>}
+                  {e.link_zoom && <a class="btn btn-claro btn-pequeno" href={e.link_zoom} rel="noopener">Entrar no Zoom</a>}
+                </div>
+              </article>
+            );
+          })}
+        </div>
+      ) : (
+        <div class="cartao vazio">Nenhum evento especial marcado por enquanto. Os próximos aparecem aqui e no app assim que forem anunciados.</div>
+      )}
+    </div>
+  </section>
+
+  <CtaFinal titulo="Receba a agenda no seu celular" texto="No app da Peniel você vê os encontros da semana, recebe os avisos da igreja e entra no Zoom com um toque." />
+</Base>

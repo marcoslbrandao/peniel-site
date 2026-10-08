@@ -1,0 +1,69 @@
+---
+import Base from '../layouts/Base.astro';
+import TopoPagina from '../components/TopoPagina.astro';
+import CtaFinal from '../components/CtaFinal.astro';
+import { rota } from '../lib/rotas';
+
+// Texto da página "Sobre nós" do site atual (penielchurch.org.uk/about/).
+const CRENCAS = [
+  'As Escrituras Sagradas, compostas do Antigo e Novo Testamentos, são inteiramente inspiradas por Deus, infalíveis na sua composição original e completamente dignas de confiança em quaisquer áreas que venham a se expressar, sendo também a autoridade final e suprema de fé e conduta.',
+  'Há um só Deus eterno, poderoso e perfeito, distinto em sua trindade: Pai, Filho e Espírito Santo.',
+  'Jesus Cristo nasceu do Espírito Santo e da virgem Maria, sendo verdadeiro Deus e verdadeiro Homem e o único mediador entre Deus e o homem. Somente Ele foi perfeito em natureza, ensino e obediência.',
+  'O Espírito Santo é o regenerador e santificador dos redimidos, o doador dos dons e frutos espirituais, o Consolador permanente e Mestre da Igreja.',
+  'Em Adão a humanidade foi criada à imagem e semelhança de Deus. Devido à queda de Adão, a humanidade tornou-se radicalmente corrupta e distanciada de Deus. O essencial para o homem é a restauração de sua comunhão com Deus, a qual o homem é incapaz de operar por si mesmo.',
+  'A salvação eterna, dom de Deus, tem sido providenciada para o homem unicamente pela graça do Senhor e pela morte vicária de Cristo Jesus. Fé é o meio pelo qual o crente se apropria dos benefícios da salvação da Sua morte.',
+  'Jesus Cristo ressuscitou fisicamente dentre os mortos, ascendeu aos céus e voltará na consumação dos séculos para julgar os homens.',
+  'A punição eterna, incluindo a separação e perda de comunhão com Deus, é o destino final do homem não regenerado e Satanás com todos os seus anjos.',
+  'A Igreja cristã, o corpo e a noiva de Cristo, é consagrada à adoração e ao serviço de Deus através da proclamação fiel da Palavra, a prática de boas obras e a observância do Batismo e da Ceia do Senhor.',
+  'A tarefa da Igreja é ensinar a todas as nações, fazendo com que o Evangelho produza frutos em cada aspecto da vida e do pensamento. A missão suprema da Igreja é a salvação das almas. Deus transforma a natureza humana, tornando-se isto, então, o meio para a redenção da sociedade.',
+];
+---
+<Base atual="sobre" titulo="Sobre nós · Peniel Church" descricao="Quem somos, nossos pastores Marcos e Débora Brandão e as dez afirmações de fé da Peniel Church, em Reading.">
+  <TopoPagina sobretitulo="Sobre nós" titulo="Uma família de fé no coração de Reading" lead="E, assim, se alguém está em Cristo, é nova criação; as coisas antigas já passaram; eis que se fizeram novas. — 2 Coríntios 5:17" />
+
+  <section class="secao" aria-labelledby="proposito">
+    <div class="wrap duas-colunas">
+      <div class="texto-longo">
+        <h2 id="proposito" style="margin-top:0">Nosso propósito</h2>
+        <p>Existimos por um único propósito: promover e estabelecer o Reino de Deus em cada lugar para onde Ele nos levar. Não nos consideramos mais do que um instrumento em Suas mãos — e é assim que queremos servir: refletindo o amor de Deus ao próximo e tornando o Evangelho acessível a todos, sem exceção.</p>
+        <p>Somos uma igreja de brasileiros e de amigos de muitos lugares. O culto é em português, com tradução ao vivo para inglês e espanhol pelo app — porque ninguém deveria ficar de fora por causa da língua.</p>
+      </div>
+      <aside class="lateral">
+        <div class="cartao">
+          <h3>Quando nos encontramos</h3>
+          <p>Culto todo domingo às 18h em Abbey Square, Reading. Durante a semana, oração na terça e estudo bíblico na quarta, pelo Zoom.</p>
+          <a class="link-seta" href={rota('agenda')}>Ver a agenda</a>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <section class="secao" id="pastores" aria-labelledby="pastores-titulo">
+    <div class="wrap pastores-grande">
+      <img src={rota('img/pastores.jpg')} alt="Pastores Marcos e Débora Brandão" width="1000" height="510" loading="lazy" />
+      <div class="texto-longo">
+        <span class="rotulo">Pastores</span>
+        <h2 id="pastores-titulo" style="margin-top:-8px">Marcos &amp; Débora Brandão</h2>
+        <p>Marcos Brandão é casado com Débora Brandão desde 2001. O casal se conheceu na igreja, onde serviu ativamente no grupo de louvor e liderou o ministério de adolescentes até 2003, quando se mudaram para a Inglaterra. A ideia inicial era ficar no Reino Unido por dois anos, apenas para aprender inglês e aplicá-lo em suas profissões — Marcos como fotógrafo e Débora como estilista. Mas os planos de Deus eram maiores.</p>
+        <p>Sempre envolvidos com a igreja, tanto na música quanto na liderança, foram ordenados ao diaconato em 2006 e ao ministério pastoral em 2010. Nesse período, enfrentaram o desafio de conseguir residência no Reino Unido — algo humanamente improvável, sem vínculos de descendência europeia. Ainda assim, através do que consideram um milagre, obtiveram sua residência: uma confirmação de que sua presença na Inglaterra fazia parte de um propósito maior.</p>
+        <p>De Londres, chegaram à Peniel Church, em Reading, no dia 4 de março de 2017. Desde então, Marcos e Débora pastoreiam com amor e dedicação, aprendendo e compartilhando a graça de Deus com todos ao seu redor. Eles confiam no sustento e na sabedoria de Deus para seguirem firmes e íntegros em sua caminhada e ministério.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="secao" id="no-que-cremos" aria-labelledby="cremos-titulo">
+    <div class="wrap">
+      <div class="cabeca-secao">
+        <div>
+          <h2 class="secao-titulo" id="cremos-titulo">No que cremos</h2>
+          <p class="secao-sub">Dez afirmações que sustentam o que ensinamos e como vivemos.</p>
+        </div>
+      </div>
+      <ol class="crencas">
+        {CRENCAS.map((c) => <li>{c}</li>)}
+      </ol>
+    </div>
+  </section>
+
+  <CtaFinal />
+</Base>

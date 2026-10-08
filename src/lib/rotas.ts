@@ -13,10 +13,11 @@ export function rota(caminho = ''): string {
 }
 
 export const MENU = [
-  { rotulo: 'Início', href: '' },
   { rotulo: 'Sobre', href: 'sobre' },
+  { rotulo: 'Planeje sua visita', href: 'planeje-sua-visita' },
   { rotulo: 'Agenda', href: 'agenda' },
   { rotulo: 'Mensagens', href: 'mensagens' },
+  { rotulo: 'Devocionais', href: 'devocionais' },
   { rotulo: 'Contribua', href: 'contribua' },
   { rotulo: 'Contato', href: 'contato' },
 ];

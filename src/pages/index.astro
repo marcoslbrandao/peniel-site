@@ -6,7 +6,7 @@ import Oferta from '../components/home/Oferta.astro';
 import Bandeira from '../components/Bandeira.astro';
 import { rota } from '../lib/rotas';
 import { LINKS, GOOGLE_PLAY_NO_AR } from '../lib/config';
-import { encontrosDaSemana, devocionalDeHoje, ultimasMensagens, proximoEstudo, dataBR, horaCurta, resumir, DIAS } from '../lib/dados';
+import { encontrosDaSemana, devocionalDeHoje, ultimasMensagens, proximoEstudo, dataBR, horaCurta, resumir, slugMensagem, DIAS } from '../lib/dados';
 import { cartoes } from '../lib/encontros';
 import { diaMes, proximaData } from '../lib/datas';
 
@@ -111,7 +111,7 @@ const miniEventos = [
         <div class="primeira-intro">
           <h2 class="secao-titulo" id="primeira-titulo">Primeira vez aqui?</h2>
           <p>Chegar numa igreja onde você não conhece ninguém é desconfortável. A gente sabe — boa parte de nós já passou por isso ao mudar de país. Aqui vai o que esperar, para você chegar sabendo.</p>
-          <a class="link-seta" href={`mailto:${LINKS.email}?subject=Quero%20visitar%20a%20Peniel`}>Fale com alguém antes de vir <Icone nome="seta" tam={16} traco={2.2} /></a>
+          <a class="link-seta" href={rota('contato')}>Fale com alguém antes de vir <Icone nome="seta" tam={16} traco={2.2} /></a>
         </div>
 
         <div class="primeira-grade">
@@ -168,7 +168,7 @@ const miniEventos = [
             </blockquote>
             {reflexao && <p class="devocional-texto">{reflexao}</p>}
             <div class="linha"></div>
-            <a class="link-seta" href={rota('devocionais')}>Ler o devocional completo <Icone nome="seta" tam={17} traco={2.2} /></a>
+            <a class="link-seta" href={rota(`devocionais#d-${devocional.id}`)}>Ler o devocional completo <Icone nome="seta" tam={17} traco={2.2} /></a>
           </div>
         </article>
       ) : (
@@ -194,7 +194,7 @@ const miniEventos = [
 
         <div class="lista-mensagens">
           {mensagens.length ? mensagens.map((m, i) => (
-            <a class="cartao mensagem" href={rota(`mensagens#m-${m.id}`)}>
+            <a class="cartao mensagem" href={rota(`mensagens/${slugMensagem(m)}`)}>
               <div class={`mensagem-capa capa-${i % 3}`}>
                 {m.imagem_url ? <img src={m.imagem_url} alt="" loading="lazy" /> : <Icone nome="documento" tam={22} traco={1.6} />}
               </div>
@@ -243,10 +243,10 @@ const miniEventos = [
     <div class="wrap">
       <div class="app-texto">
         <h2 id="app-titulo">O site é a porta. O app é a casa.</h2>
-        <p>Quem já faz parte da Peniel vive a semana pelo app: grupos, escalas, pedidos de oração e o estudo de quarta ficam na Área do Membro. Mas não é preciso ser membro para usar — a Bíblia, os devocionais, o versículo do dia, a agenda e os avisos da igreja estão abertos a qualquer pessoa. Baixar é de graça.</p>
+        <p>Quem já faz parte da Peniel vive a semana pelo app: grupos, escalas e o estudo de quarta ficam na Área do Membro. Mas não é preciso ser membro para usar — a Bíblia, os devocionais, o versículo do dia, a agenda e os avisos da igreja estão abertos a qualquer pessoa. Baixar é de graça.</p>
 
         <ul class="recursos">
-          {['Bíblia completa em 4 idiomas', 'Devocional três vezes por semana', 'Grupos, chat e escalas', 'Agenda e avisos da igreja', 'Oferta segura em segundos', 'Tradução ao vivo do culto'].map((r) => (
+          {['Bíblia em vários idiomas', 'Devocional três vezes por semana', 'Grupos, chat e escalas', 'Agenda e avisos da igreja', 'Oferta segura em segundos', 'Tradução ao vivo do culto'].map((r) => (
             <li><Icone nome="check" tam={17} cor="#F5C842" traco={2.4} />{r}</li>
           ))}
         </ul>

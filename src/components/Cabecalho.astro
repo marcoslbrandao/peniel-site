@@ -22,7 +22,7 @@ const { atual = '' } = Astro.props;
     </nav>
 
     <div class="topo-acoes">
-      <a class="idioma" href={rota('#live-translation')} lang="en">EN</a>
+      <a class="idioma" href={rota('live-translation')} lang="en" title="Live translation · Traducción en vivo">EN · ES</a>
       <a class="btn btn-navy" href={LINKS.app}>
         <Icone nome="celular" tam={16} />
         <span>Baixar <span class="rotulo-longo">o </span>app</span>
@@ -30,10 +30,12 @@ const { atual = '' } = Astro.props;
       <details class="menu-movel">
         <summary aria-label="Abrir menu"><Icone nome="menu" tam={20} cor="#1A1740" /></summary>
         <nav class="menu-painel" aria-label="Menu">
+          <a href={rota()} aria-current={atual === '' ? 'page' : undefined}>Início</a>
           {MENU.map((m) => (
             <a href={rota(m.href)} aria-current={m.href === atual ? 'page' : undefined}>{m.rotulo}</a>
           ))}
-          <a href={rota('#live-translation')} lang="en">Live translation (EN)</a>
+          <a href={rota('o-app')} aria-current={atual === 'o-app' ? 'page' : undefined}>O app</a>
+          <a href={rota('live-translation')} lang="en">Live translation · Traducción</a>
         </nav>
       </details>
     </div>
