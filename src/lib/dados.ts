@@ -177,14 +177,16 @@ export async function devocionais(limite = 60): Promise<Devocional[]> {
 }
 
 /** Quebra um texto do app em blocos: parágrafos e subtítulos fixos do devocional. */
-export function blocos(texto: string): { tipo: 'p' | 'h'; texto: string }[] {
+export function blocos(texto: string, opcoes: { subtitulos?: boolean } = {}): { tipo: 'p' | 'h' | 's'; texto: string }[] {
   const ROTULOS = /^(Para refletir|Ora[çc][ãa]o|Refer[êe]ncias|Aplica[çc][ãa]o|Desafio)\s*:?\s*/i;
-  const saida: { tipo: 'p' | 'h'; texto: string }[] = [];
+  const saida: { tipo: 'p' | 'h' | 's'; texto: string }[] = [];
   for (const bruto of texto.replace(/\r/g, '').split(/\n\s*\n/)) {
     const linhas = bruto.split('\n').map((l) => l.trim()).filter(Boolean);
     if (!linhas.length) continue;
     const m = linhas[0].match(ROTULOS);
-    if (m) {
+    if (opcoes.subtitulos && ehSubtitulo(linhas)) {
+      saida.push({ tipo: 's', texto: linhas[0] });
+    } else if (m) {
       saida.push({ tipo: 'h', texto: m[1] });
       const resto = [linhas[0].slice(m[0].length), ...linhas.slice(1)].join(' ').trim();
       if (resto) saida.push({ tipo: 'p', texto: resto });
@@ -193,6 +195,15 @@ export function blocos(texto: string): { tipo: 'p' | 'h'; texto: string }[] {
     }
   }
   return saida;
+}
+
+/** Subtitulo de mensagem: uma linha so, curta, sem pontuacao final e sem referencia biblica. */
+function ehSubtitulo(linhas: string[]): boolean {
+  if (linhas.length !== 1) return false;
+  const l = linhas[0];
+  if (l.length > 70 || l.includes('(')) return false;
+  const miolo = l.replace(/^["\u201C\u201D]+|["\u201C\u201D]+$/g, '');
+  return !/[.!?:;,]$/.test(miolo) && !/[.!?:;,)]$/.test(l);
 }
 
 /** Endereço amigável de uma mensagem: "reconstruindo-os-muros-1a2b3c". */

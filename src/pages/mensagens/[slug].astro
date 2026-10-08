@@ -28,7 +28,7 @@ const { m, anterior, proxima } = Astro.props;
       <article class="texto-longo">
         {m.imagem_url && <img class="artigo-capa" src={m.imagem_url} alt="" />}
         <p style="font-size:19px;color:#1A1A2E;font-weight:500">{m.resumo}</p>
-        {blocos(m.conteudo).map((b) => (b.tipo === 'h' ? <h4>{b.texto}</h4> : <p>{b.texto}</p>))}
+        {blocos(m.conteudo, { subtitulos: true }).map((b) => (b.tipo === 's' ? <h3>{b.texto}</h3> : b.tipo === 'h' ? <h4>{b.texto}</h4> : <p>{b.texto}</p>))}
       </article>
       <aside class="lateral">
         {proxima && (
