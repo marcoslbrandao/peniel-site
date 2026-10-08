@@ -197,8 +197,14 @@ svg { flex-shrink: 0; }
 /* ─── Live translation ───────────────────────────────────── */
 .traducao { border-radius: var(--raio-g); padding: 46px 52px; display: flex; align-items: center; gap: 52px; }
 .traducao-icone { width: 78px; height: 78px; border-radius: 22px; background: var(--aovivo); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-.traducao-texto { flex: 1 1 0; display: flex; flex-direction: column; gap: 10px; }
-.traducao h2 { font-size: 29px; font-weight: 800; }
+.traducao { align-items: flex-start; }
+.traducao-texto { flex: 1 1 0; display: flex; flex-direction: column; gap: 26px; }
+.traducao-lingua { display: flex; gap: 16px; align-items: flex-start; }
+.traducao-lingua + .traducao-lingua { padding-top: 26px; border-top: 1px solid var(--borda); }
+.traducao-lingua .bandeira { margin-top: 6px; }
+.traducao-lingua > div { display: flex; flex-direction: column; gap: 10px; }
+.traducao h2 { font-size: 25px; font-weight: 800; line-height: 1.2; }
+.traducao .btn { align-self: center; }
 .traducao p { font-size: 16.5px; line-height: 1.6; color: var(--texto-2); max-width: 720px; }
 .traducao p strong { color: var(--texto); font-weight: 600; }
 .traducao .btn { flex-shrink: 0; font-size: 15px; }
@@ -379,7 +385,8 @@ svg { flex-shrink: 0; }
   .mensagem h3 { font-size: 16.5px; }
   .mensagem p { font-size: 13.5px; }
   .traducao { padding: 28px 22px; }
-  .traducao h2 { font-size: 23px; }
+  .traducao h2 { font-size: 21px; }
+  .traducao .btn { align-self: stretch; }
   .traducao p { font-size: 15.5px; }
   .traducao .btn { width: 100%; }
   .app { margin-top: 56px; }

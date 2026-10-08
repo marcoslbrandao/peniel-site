@@ -3,6 +3,7 @@ import Base from '../layouts/Base.astro';
 import Icone from '../components/Icone.astro';
 import Hero from '../components/home/Hero.astro';
 import Oferta from '../components/home/Oferta.astro';
+import Bandeira from '../components/Bandeira.astro';
 import { rota } from '../lib/rotas';
 import { LINKS, GOOGLE_PLAY_NO_AR } from '../lib/config';
 import { encontrosDaSemana, devocionalDeHoje, ultimasMensagens, proximoEstudo, dataBR, horaCurta, resumir, DIAS } from '../lib/dados';
@@ -211,16 +212,28 @@ const miniEventos = [
     </div>
   </section>
 
-  <!-- ─── Live translation (em inglês, de propósito) ─────── -->
-  <section class="secao" id="live-translation" lang="en" aria-labelledby="traducao-titulo">
+  <!-- ─── Live translation (inglês e espanhol, de propósito) ─ -->
+  <section class="secao" id="live-translation" aria-label="Live translation · Traducción en vivo">
     <div class="wrap">
       <div class="cartao traducao">
         <div class="traducao-icone"><Icone nome="fone" tam={34} cor="#FFFFFF" traco={1.7} /></div>
         <div class="traducao-texto">
-          <h2 id="traducao-titulo">Our service is in Portuguese. You can still follow every word.</h2>
-          <p>Open the Peniel Church app during the service, tap <strong>Live translation</strong>, put your headphones in, and listen in <strong>English</strong> or <strong>Spanish</strong>, interpreted live as the pastor speaks. Nothing to set up, no extra app, no cost.</p>
+          <div class="traducao-lingua" lang="en">
+            <Bandeira pais="gb" tam={26} />
+            <div>
+              <h2>Our service is in Portuguese. You can still follow every word.</h2>
+              <p>Open the Peniel Church app during the service, tap <strong>Live translation</strong>, put your headphones in, and listen in <strong>English</strong> or <strong>Spanish</strong>, interpreted live as the pastor speaks. Nothing to set up, no extra app, no cost.</p>
+            </div>
+          </div>
+          <div class="traducao-lingua" lang="es">
+            <Bandeira pais="es" tam={26} />
+            <div>
+              <h2>Nuestro culto es en portugués. Aun así, puedes seguir cada palabra.</h2>
+              <p>Abre la app de Peniel Church durante el culto, toca <strong>Live translation</strong>, ponte los auriculares y escucha en <strong>inglés</strong> o <strong>español</strong>, interpretado en vivo mientras el pastor predica. Sin configurar nada, sin otra app y sin costo.</p>
+            </div>
+          </div>
         </div>
-        <a class="btn btn-navy" href={LINKS.app}>Get the app <Icone nome="seta" tam={17} traco={2.2} /></a>
+        <a class="btn btn-navy" href={LINKS.app}><span lang="en">Get the app</span><span aria-hidden="true">·</span><span lang="es">Descarga la app</span> <Icone nome="seta" tam={17} traco={2.2} /></a>
       </div>
     </div>
   </section>
