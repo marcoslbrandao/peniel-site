@@ -65,7 +65,7 @@ import { OFERTA_VALORES, OFERTA_MAXIMO, LINKS } from '../../lib/config';
       contribuir.disabled = true;
       rotulo.textContent = 'Abrindo o pagamento…';
       total.hidden = true;
-      location.href = `${caixa.dataset.checkout}?valor=${Math.round(v * 100) / 100}&moeda=gbp`;
+      location.href = `${caixa.dataset.checkout}?valor=${Math.round(v * 100) / 100}&moeda=gbp&retorno=${encodeURIComponent(location.origin + location.pathname)}`;
     });
 
     // Voltando do Stripe pelo botão "voltar" do navegador, o botão destrava.
