@@ -31,9 +31,9 @@ jobs:
       - run: npm ci
       - run: npm run build
         env:
-          # Endereco de teste. Na virada do dominio: SITE=https://penielchurch.org.uk e BASE=/
-          SITE: https://marcoslbrandao.github.io
-          BASE: /peniel-site
+          # Endereco oficial (virada do dominio em 09/10/2026).
+          SITE: https://penielchurch.org.uk
+          BASE: /
       - uses: actions/upload-pages-artifact@v3
         with:
           path: dist
