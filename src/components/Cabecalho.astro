@@ -2,6 +2,7 @@
 import Icone from './Icone.astro';
 import { MENU, rota } from '../lib/rotas';
 import { LINKS } from '../lib/config';
+import Redes from './Redes.astro';
 interface Props { atual?: string }
 const { atual = '' } = Astro.props;
 ---
@@ -36,6 +37,7 @@ const { atual = '' } = Astro.props;
           ))}
           <a href={rota('o-app')} aria-current={atual === 'o-app' ? 'page' : undefined}>O app</a>
           <a href={rota('live-translation')} lang="en">Live translation · Traducción</a>
+          <Redes class="redes-menu" />
         </nav>
       </details>
     </div>

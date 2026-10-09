@@ -1,0 +1,103 @@
+---
+// Aviso e evento "em destaque na Home" do app, também na Home do site.
+//
+// Lido no NAVEGADOR (não no build) de propósito: marcou ou desmarcou o
+// destaque no Painel Admin, o site já mostra na próxima visita, sem esperar
+// o site ser refeito. A seção nasce escondida e só aparece se houver algo.
+//
+// Só entra aviso geral e aberto: a própria regra do banco (RLS) não devolve
+// aviso de grupo nem "só membros" para quem não está logado.
+import { rota } from '../../lib/rotas';
+---
+<section class="destaques" hidden aria-label="Em destaque" data-agenda={rota('agenda')}>
+  <div class="wrap destaques-grade"></div>
+</section>
+
+<script>
+  import { SUPABASE_URL, SUPABASE_ANON_KEY } from '../../lib/config';
+  import { proximaData } from '../../lib/datas';
+
+  const secao = document.querySelector<HTMLElement>('.destaques');
+  const grade = secao?.querySelector<HTMLElement>('.destaques-grade');
+
+  const dataBR = (iso: string) => { const [a, m, d] = iso.slice(0, 10).split('-'); return `${d}/${m}/${a}`; };
+  const hora = (h?: string | null) => {
+    if (!h) return '';
+    const m = h.match(/(\d{1,2})\s*[h:]\s*(\d{2})?/i);
+    if (!m) return h;
+    return m[2] && m[2] !== '00' ? `${Number(m[1])}h${m[2]}` : `${Number(m[1])}h`;
+  };
+  // Link de botão só se for de web (o app às vezes guarda link interno do app).
+  const linkWeb = (u?: string | null) => (u && /^https?:\/\//i.test(u.trim()) ? u.trim() : null);
+
+  function el<K extends keyof HTMLElementTagNameMap>(tag: K, classe?: string, texto?: string) {
+    const e = document.createElement(tag);
+    if (classe) e.className = classe;
+    if (texto) e.textContent = texto;
+    return e;
+  }
+
+  async function buscar(caminho: string) {
+    const r = await fetch(`${SUPABASE_URL}/rest/v1/${caminho}`, {
+      headers: { apikey: SUPABASE_ANON_KEY, Authorization: `Bearer ${SUPABASE_ANON_KEY}` },
+    });
+    return r.ok ? r.json() : [];
+  }
+
+  function cartaoAviso(a: any) {
+    const c = el('article', 'cartao destaque destaque-aviso');
+    const corpo = el('div', 'destaque-corpo');
+    corpo.append(el('span', 'destaque-rotulo', 'Aviso importante'), el('h3', '', a.titulo));
+    if (a.texto) corpo.append(el('p', 'destaque-texto', a.texto));
+    const url = linkWeb(a.cta_url);
+    if (url) {
+      const b = el('a', 'btn btn-laranja', a.cta_texto || 'Abrir link') as HTMLAnchorElement;
+      b.href = url;
+      corpo.append(b);
+    }
+    c.append(corpo);
+    return c;
+  }
+
+  function cartaoEvento(e: any) {
+    const c = el('article', 'cartao destaque destaque-evento');
+    c.style.setProperty('--cor', e.cor || '#E84B1A');
+    if (e.imagem_url) {
+      const img = el('img', 'destaque-imagem') as HTMLImageElement;
+      img.src = e.imagem_url; img.alt = ''; img.loading = 'lazy';
+      c.append(img);
+    }
+    const corpo = el('div', 'destaque-corpo');
+    let quando = hora(e.horario);
+    if (!e.recorrente && e.data) quando = [dataBR(e.data), quando].filter(Boolean).join(' · ');
+    else if (e.recorrente && e.dia_semana !== null) quando = [`Próximo: ${dataBR(proximaData(e.dia_semana))}`, quando].filter(Boolean).join(' · ');
+    corpo.append(el('span', 'destaque-rotulo', 'Evento'), el('h3', '', e.nome));
+    if (quando) corpo.append(el('span', 'destaque-quando', quando));
+    if (e.descricao) corpo.append(el('p', 'destaque-texto', e.descricao));
+    const url = linkWeb(e.cta_url);
+    const b = el('a', 'btn btn-evento', url ? (e.cta_texto || 'Saiba mais') : 'Ver na agenda') as HTMLAnchorElement;
+    b.href = url ?? (secao?.dataset.agenda || 'agenda');
+    corpo.append(b);
+    c.append(corpo);
+    return c;
+  }
+
+  (async () => {
+    if (!secao || !grade) return;
+    try {
+      const [avisos, eventos] = await Promise.all([
+        buscar('avisos?select=id,titulo,texto,cta_texto,cta_url&destaque_home=eq.true&limit=1'),
+        buscar('agenda_eventos?select=id,nome,descricao,cor,data,recorrente,dia_semana,horario,cta_texto,cta_url,imagem_url&destaque_home=eq.true&limit=1'),
+      ]);
+      const hoje = new Date().toISOString().slice(0, 10);
+      const evento = (eventos as any[]).find((e) => e.recorrente || !e.data || e.data.slice(0, 10) >= hoje);
+      const aviso = (avisos as any[])[0];
+      if (aviso) grade.append(cartaoAviso(aviso));
+      if (evento) grade.append(cartaoEvento(evento));
+      if (grade.children.length) {
+        grade.dataset.qtd = String(grade.children.length);
+        secao.hidden = false;
+      }
+    } catch { /* sem rede: a seção continua escondida */ }
+  })();
+</script>

@@ -596,3 +596,37 @@ svg { flex-shrink: 0; }
   .menu-painel a:hover, .menu-painel a[aria-current="page"] { background: var(--bg); color: var(--navy); }
   .menu-painel a[aria-current="page"] { font-weight: 600; }
 }
+
+/* ─── Em destaque (aviso e evento marcados no Painel Admin do app) ─── */
+.destaques { padding-top: 40px; }
+.destaques-grade { display: grid; grid-template-columns: minmax(0, 1fr); gap: 20px; }
+.destaques-grade[data-qtd="2"] { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.destaque { overflow: hidden; display: flex; flex-direction: column; }
+.destaque-aviso { border-left: 5px solid var(--aovivo); }
+.destaque-evento { border-left: 5px solid var(--cor, var(--aovivo)); }
+.destaque-imagem { width: 100%; aspect-ratio: 2 / 1; object-fit: cover; display: block; }
+.destaque-corpo { padding: 24px 26px 26px; display: flex; flex-direction: column; gap: 10px; align-items: flex-start; flex: 1; }
+.destaque-rotulo { font-size: 11.5px; font-weight: 700; letter-spacing: .09em; text-transform: uppercase; color: var(--aovivo); }
+.destaque-evento .destaque-rotulo { color: var(--cor, var(--aovivo)); }
+.destaque h3 { font-size: 21px; font-weight: 800; color: var(--texto); line-height: 1.25; }
+.destaque-quando { font-size: 14.5px; font-weight: 600; color: var(--texto-2); }
+.destaque-texto { font-size: 15px; line-height: 1.6; color: var(--texto-2); white-space: pre-line; }
+.destaque .btn { margin-top: auto; padding: 12px 20px; font-size: 14.5px; border-radius: 11px; color: #fff; }
+.btn-laranja { background: var(--aovivo); }
+.btn-evento { background: var(--cor, var(--aovivo)); }
+.btn-laranja:hover, .btn-evento:hover { color: #fff; }
+@media (max-width: 760px) {
+  .destaques { padding-top: 28px; }
+  .destaques-grade[data-qtd="2"] { grid-template-columns: minmax(0, 1fr); }
+  .destaque-corpo { padding: 20px; }
+}
+
+/* ─── Redes sociais (rodapé e menu do celular) ─── */
+.redes { display: flex; gap: 10px; }
+.redes a { width: 40px; height: 40px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; transition: background .15s ease, color .15s ease; }
+.redes-rodape { margin-top: 4px; }
+.rodape-marca .redes-rodape a { background: rgba(255,255,255,.08); color: rgba(255,255,255,.75); }
+.rodape-marca .redes-rodape a:hover { background: var(--dourado); color: var(--navy-deep); }
+.menu-painel .redes-menu { border-top: 1px solid var(--borda); margin-top: 6px; padding: 12px 8px 4px; }
+.menu-painel .redes-menu a { padding: 0; background: var(--bg); color: var(--navy); border-radius: 50%; }
+.menu-painel .redes-menu a:hover { background: var(--navy); color: #fff; }

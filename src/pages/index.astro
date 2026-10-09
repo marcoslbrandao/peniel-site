@@ -3,6 +3,7 @@ import Base from '../layouts/Base.astro';
 import Icone from '../components/Icone.astro';
 import Hero from '../components/home/Hero.astro';
 import Oferta from '../components/home/Oferta.astro';
+import Destaques from '../components/home/Destaques.astro';
 import Bandeira from '../components/Bandeira.astro';
 import { rota } from '../lib/rotas';
 import { LINKS, GOOGLE_PLAY_NO_AR } from '../lib/config';
@@ -31,6 +32,7 @@ const miniEventos = [
 ---
 <Base atual="">
   <Hero />
+  <Destaques />
 
   <!-- ─── A semana na Peniel ─────────────────────────────── -->
   <section class="secao" aria-labelledby="semana-titulo">

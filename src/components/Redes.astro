@@ -1,0 +1,19 @@
+---
+// Ícones das redes sociais da igreja (rodapé e menu do celular).
+import Icone from './Icone.astro';
+import { LINKS } from '../lib/config';
+interface Props { class?: string }
+const { class: classe = '' } = Astro.props;
+const REDES = [
+  { nome: 'YouTube', icone: 'youtube', href: LINKS.youtube },
+  { nome: 'Instagram', icone: 'instagram', href: LINKS.instagram },
+  { nome: 'Facebook', icone: 'facebook', href: LINKS.facebook },
+];
+---
+<div class={`redes ${classe}`}>
+  {REDES.map((r) => (
+    <a href={r.href} rel="noopener" target="_blank" aria-label={`Peniel Church no ${r.nome}`} title={r.nome}>
+      <Icone nome={r.icone} tam={19} traco={1.8} />
+    </a>
+  ))}
+</div>

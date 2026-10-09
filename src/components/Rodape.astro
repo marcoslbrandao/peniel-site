@@ -1,6 +1,7 @@
 ---
 import { rota } from '../lib/rotas';
 import { LINKS } from '../lib/config';
+import Redes from './Redes.astro';
 const ano = new Date().getFullYear();
 ---
 <footer class="rodape">
@@ -12,6 +13,7 @@ const ano = new Date().getFullYear();
           <span class="marca-nome">Peniel Church</span>
         </a>
         <p>Abbey Square, Reading, RG1 3BE<br /><a href={`mailto:${LINKS.email}`}>{LINKS.email}</a></p>
+        <Redes class="redes-rodape" />
       </div>
 
       <div class="rodape-colunas">

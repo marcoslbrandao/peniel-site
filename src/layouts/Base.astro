@@ -58,13 +58,29 @@ const igreja = {
   </main>
   <Rodape />
   <script>
+    // Link para fora do site abre em outra aba, para o site continuar aberto.
+    // Vale também para links que chegam depois (avisos, textos do banco):
+    // por isso, além de marcar os que já existem, confere no clique.
+    const externo = (a: HTMLAnchorElement) =>
+      /^https?:$/.test(a.protocol) && a.hostname !== location.hostname;
+    const abrirFora = (a: HTMLAnchorElement) => {
+      if (!externo(a) || a.target) return;
+      a.target = '_blank';
+      a.rel = [a.rel, 'noopener'].filter(Boolean).join(' ');
+    };
+    document.querySelectorAll<HTMLAnchorElement>('a[href]').forEach(abrirFora);
+    document.addEventListener('click', (ev) => {
+      const a = (ev.target as Element | null)?.closest?.('a[href]') as HTMLAnchorElement | null;
+      if (a) abrirFora(a);
+    }, true);
+
     const topo = document.querySelector('.topo');
     const aoRolar = () => topo?.classList.toggle('rolou', scrollY > 8);
     addEventListener('scroll', aoRolar, { passive: true });
     aoRolar();
 
     const reduz = matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const alvos = document.querySelectorAll('main > section:not(.hero)');
+    const alvos = document.querySelectorAll('main > section:not(.hero):not(.destaques)');
     if (reduz || !('IntersectionObserver' in window)) {
       document.documentElement.classList.remove('js');
     } else {
