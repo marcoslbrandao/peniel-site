@@ -195,7 +195,7 @@ const miniEventos = [
         <div class="lista-mensagens">
           {mensagens.length ? mensagens.map((m, i) => (
             <a class="cartao mensagem" href={rota(`mensagens/${slugMensagem(m)}`)}>
-              <div class={`mensagem-capa capa-${i % 3}`}>
+              <div class={m.imagem_url ? `mensagem-capa capa-${i % 3}` : 'mensagem-capa capa-padrao-mini'}>
                 {m.imagem_url ? <img src={m.imagem_url} alt="" loading="lazy" /> : <Icone nome="documento" tam={22} traco={1.6} />}
               </div>
               <div class="mensagem-corpo">

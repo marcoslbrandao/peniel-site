@@ -22,10 +22,17 @@ const mensagens = await todasMensagens();
         <div class="grade-mensagens">
           {mensagens.map((m) => (
             <a class="cartao card-mensagem" href={rota(`mensagens/${slugMensagem(m)}`)}>
-              <div class="capa">{m.imagem_url ? <img src={m.imagem_url} alt="" loading="lazy" /> : <Icone nome="documento" tam={30} traco={1.5} />}</div>
+              {m.imagem_url ? (
+                <div class="capa"><img src={m.imagem_url} alt="" loading="lazy" /></div>
+              ) : (
+                <div class="capa capa-padrao">
+                  <span class="capa-data">{dataBR(m.data)}</span>
+                  <h2 class="capa-titulo">{m.titulo}</h2>
+                </div>
+              )}
               <div class="corpo">
-                <span class="meta">{dataBR(m.data)} · {m.autor}</span>
-                <h2>{m.titulo}</h2>
+                <span class="meta">{m.imagem_url ? `${dataBR(m.data)} · ${m.autor}` : m.autor}</span>
+                {m.imagem_url && <h2>{m.titulo}</h2>}
                 <p>{resumir(m.resumo, 170)}</p>
               </div>
             </a>
