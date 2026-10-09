@@ -142,7 +142,7 @@ svg { flex-shrink: 0; }
 .cremos p { font-size: 14.5px; line-height: 1.55; color: var(--texto-2); margin-top: 4px; }
 .pastores { flex: 1 1 0; min-width: 0; border-radius: var(--raio-g); overflow: hidden; display: flex; flex-direction: column; }
 .pastores-foto { height: 268px; background: var(--roxo-claro); }
-.pastores-foto img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 32%; }
+.pastores-foto img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 10%; }
 .pastores-corpo { padding: 28px; display: flex; flex-direction: column; gap: 13px; flex-grow: 1; }
 .pastores-corpo h3 { font-size: 23px; font-weight: 800; margin-top: 4px; }
 .pastores-corpo p { font-size: 15px; line-height: 1.65; color: var(--texto-2); }
