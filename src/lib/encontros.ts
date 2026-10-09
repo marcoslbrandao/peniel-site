@@ -11,7 +11,7 @@ import { DIAS, horaCurta } from './dados';
 type Apresentacao = { titulo: string; convite: string };
 
 const TEXTOS: { chave: RegExp; texto: Apresentacao }[] = [
-  { chave: /culto/i, texto: { titulo: 'Culto Dominical', convite: 'O encontro principal da semana: louvor, a Palavra e comunhão.' } },
+  { chave: /culto/i, texto: { titulo: 'Culto Dominical', convite: 'O encontro principal da semana, com louvor, a Palavra de Deus e comunhão. Venha com sua família: as crianças têm um espaço especial para elas. Será uma alegria receber você!' } },
   { chave: /ora[çc][ãa]o/i, texto: { titulo: 'Sala de Oração', convite: 'Um tempo muito especial em que, juntos, buscamos a Deus e oramos uns pelos outros. Venha participar de onde você estiver. É só entrar pelo link.' } },
   { chave: /estudo/i, texto: { titulo: 'Estudo Bíblico', convite: 'Um tempo para aprender mais da Palavra de Deus, compartilhar dúvidas e crescer juntos na fé. Você também pode acompanhar o material pelo app.' } },
   { chave: /jovens|alive/i, texto: { titulo: 'Peniel Alive', convite: 'Um encontro de jovens com fome de Deus, para aprender sobre a vida e crescer na fé. A gente se reúne na casa de um dos jovens. Fale conosco para saber onde será o próximo encontro. Venha fazer parte!' } },
