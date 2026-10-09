@@ -449,7 +449,7 @@ svg { flex-shrink: 0; }
 
 /* Sobre */
 .pastores-grande { display: grid; grid-template-columns: 460px minmax(0, 1fr); gap: 56px; align-items: start; }
-.pastores-grande img { width: 100%; border-radius: var(--raio-g); aspect-ratio: 4 / 5; object-fit: cover; object-position: 50% 30%; }
+.pastores-grande img { width: 100%; height: auto; border-radius: var(--raio-g); aspect-ratio: 3 / 2; object-fit: cover; object-position: 50% 30%; }
 .crencas { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; counter-reset: crenca; }
 .crencas li { counter-increment: crenca; background: #fff; border: 1px solid var(--borda); border-radius: var(--raio); padding: 24px 26px 24px 74px; position: relative; font-size: 15px; line-height: 1.65; color: #3D4250; }
 .crencas li::before { content: counter(crenca, decimal-leading-zero); position: absolute; left: 24px; top: 22px; font-family: var(--f-titulo); font-size: 20px; font-weight: 800; color: var(--roxo); }
