@@ -477,13 +477,13 @@ svg { flex-shrink: 0; }
 .grade-mensagens { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; }
 .card-mensagem { display: flex; flex-direction: column; overflow: hidden; color: inherit; transition: border-color .15s ease, transform .15s ease; }
 .card-mensagem:hover { color: inherit; border-color: var(--roxo-2); transform: translateY(-2px); }
-.card-mensagem .capa { aspect-ratio: 16 / 9; background: var(--roxo-claro); display: flex; align-items: center; justify-content: center; color: var(--roxo-2); }
+.card-mensagem .capa { aspect-ratio: 2 / 1; background: var(--roxo-claro); display: flex; align-items: center; justify-content: center; color: var(--roxo-2); }
 .card-mensagem .capa img { width: 100%; height: 100%; object-fit: cover; }
 .card-mensagem .corpo { padding: 22px 24px 26px; display: flex; flex-direction: column; gap: 8px; }
 .card-mensagem h2, .card-mensagem h3 { font-size: 19px; color: var(--texto); line-height: 1.3; }
 .card-mensagem p { font-size: 14.5px; line-height: 1.6; color: var(--texto-2); }
 .meta { font-size: 12.5px; color: var(--texto-2); letter-spacing: .04em; }
-.artigo-capa { width: 100%; max-height: 440px; object-fit: cover; border-radius: var(--raio-g); margin-bottom: 8px; }
+.artigo-capa { width: 100%; aspect-ratio: 2 / 1; max-height: 440px; object-fit: cover; border-radius: var(--raio-g); margin-bottom: 8px; }
 .voltar { display: inline-flex; align-items: center; gap: 8px; font-size: 14.5px; font-weight: 600; color: rgba(255,255,255,.8); }
 .voltar:hover { color: #fff; }
 .voltar svg { transform: rotate(180deg); }
