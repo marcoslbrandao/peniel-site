@@ -630,3 +630,17 @@ svg { flex-shrink: 0; }
 .menu-painel .redes-menu { border-top: 1px solid var(--borda); margin-top: 6px; padding: 12px 8px 4px; }
 .menu-painel .redes-menu a { padding: 0; background: var(--bg); color: var(--navy); border-radius: 50%; }
 .menu-painel .redes-menu a:hover { background: var(--navy); color: #fff; }
+
+/* ─── Contato: cartão das redes sociais ─── */
+.redes-cartao { display: flex; flex-direction: column; gap: 10px; }
+.redes-cartao > p { font-size: 14px; line-height: 1.55; color: var(--texto-2); margin-bottom: 4px; }
+.rede { display: flex; align-items: center; gap: 13px; padding: 10px 12px; border-radius: 14px; border: 1px solid var(--borda); color: var(--texto); transition: border-color .15s ease, transform .15s ease, box-shadow .15s ease; }
+.rede:hover { color: var(--texto); border-color: transparent; transform: translateY(-1px); box-shadow: 0 8px 22px rgba(26,23,64,.10); }
+.rede > span:nth-child(2) { flex: 1; display: flex; flex-direction: column; line-height: 1.3; }
+.rede strong { font-size: 15px; font-weight: 700; }
+.rede small { font-size: 12.5px; color: var(--texto-2); }
+.rede > svg:last-child { color: var(--texto-2); }
+.rede-icone { width: 40px; height: 40px; border-radius: 12px; display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.rede-youtube .rede-icone { background: #FF0000; }
+.rede-instagram .rede-icone { background: radial-gradient(circle at 30% 107%, #FDF497 0%, #FDF497 5%, #FD5949 45%, #D6249F 60%, #285AEB 90%); }
+.rede-facebook .rede-icone { background: #1877F2; }

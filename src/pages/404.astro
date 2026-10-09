@@ -3,7 +3,7 @@ import Base from '../layouts/Base.astro';
 import Icone from '../components/Icone.astro';
 import { rota } from '../lib/rotas';
 ---
-<Base titulo="Página não encontrada · Peniel Church">
+<Base titulo="Página não encontrada · Peniel Church" semIndice>
   <section class="wrap erro-404">
     <b>404</b>
     <h1 class="secao-titulo">Esta página não existe</h1>
@@ -14,3 +14,24 @@ import { rota } from '../lib/rotas';
     </div>
   </section>
 </Base>
+
+<script>
+  // Endereços dos sites antigos (Wix e WordPress) que ainda aparecem no Google.
+  // O GitHub Pages não faz redirecionamento por padrão de endereço, então a
+  // própria 404 leva a pessoa para a página nova equivalente.
+  import { rota } from '../lib/rotas';
+  const p = decodeURIComponent(location.pathname).toLowerCase();
+  const MAPA: [RegExp, string][] = [
+    [/^\/(post|posts|blog|mensagem|pregacoes|sermons?)(\/|$)/, 'mensagens'],
+    [/^\/(cultos|cultos-e-estudos|eventos?|events?|calendario|programacao)(\/|$)/, 'agenda'],
+    [/^\/(sobre-nos|quem-somos|about-us|nossa-historia|pastores?)(\/|$)/, 'sobre'],
+    [/^\/(contact|contact-us|fale-conosco|contatos?)(\/|$)/, 'contato'],
+    [/^\/(doacoes?|ofertas?|dizimos?|give|giving|donate)(\/|$)/, 'contribua'],
+    [/^\/(visite|visit|como-chegar|localizacao|location)(\/|$)/, 'planeje-sua-visita'],
+    [/^\/(app|aplicativo)(\/|$)/, 'o-app'],
+    [/^\/(devocional|devotional)(\/|$)/, 'devocionais'],
+    [/^\/(privacy|privacy-policy|politica-privacidade)(\/|$)/, 'politica-de-privacidade'],
+  ];
+  const achado = MAPA.find(([re]) => re.test(p));
+  if (achado) location.replace(rota(achado[1]));
+</script>

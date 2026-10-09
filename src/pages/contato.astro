@@ -35,11 +35,24 @@ import { LINKS, SUPABASE_URL } from '../lib/config';
           <div class="info"><Icone nome="pino" tam={20} cor="#534AB7" traco={1.7} /><div><strong>Abbey Square</strong><span>Reading, RG1 3BE · Reino Unido</span></div></div>
           <div class="info"><Icone nome="relogio" tam={20} cor="#534AB7" traco={1.7} /><div><strong>Culto aos domingos, 18h</strong><span>A melhor hora para conversar pessoalmente</span></div></div>
         </div>
-        <div class="cartao">
-          <h3>Nas redes</h3>
-          <a class="link-seta" href={LINKS.instagram} rel="noopener">Instagram</a>
-          <a class="link-seta" href={LINKS.youtube} rel="noopener">YouTube</a>
-          <a class="link-seta" href={LINKS.facebook} rel="noopener">Facebook</a>
+        <div class="cartao redes-cartao">
+          <h3>Acompanhe a Peniel</h3>
+          <p>Cultos ao vivo, mensagens e o dia a dia da igreja nas redes.</p>
+          <a class="rede rede-youtube" href={LINKS.youtube} rel="noopener">
+            <span class="rede-icone"><Icone nome="youtube" tam={20} cor="#fff" traco={1.9} /></span>
+            <span><strong>YouTube</strong><small>Cultos ao vivo aos domingos</small></span>
+            <Icone nome="seta" tam={16} traco={2.2} />
+          </a>
+          <a class="rede rede-instagram" href={LINKS.instagram} rel="noopener">
+            <span class="rede-icone"><Icone nome="instagram" tam={20} cor="#fff" traco={1.9} /></span>
+            <span><strong>Instagram</strong><small>Fotos, avisos e stories</small></span>
+            <Icone nome="seta" tam={16} traco={2.2} />
+          </a>
+          <a class="rede rede-facebook" href={LINKS.facebook} rel="noopener">
+            <span class="rede-icone"><Icone nome="facebook" tam={20} cor="#fff" traco={1.9} /></span>
+            <span><strong>Facebook</strong><small>Novidades e eventos da igreja</small></span>
+            <Icone nome="seta" tam={16} traco={2.2} />
+          </a>
         </div>
       </aside>
     </div>

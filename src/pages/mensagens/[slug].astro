@@ -17,8 +17,22 @@ export async function getStaticPaths() {
 
 interface Props { m: MensagemCompleta; anterior: MensagemCompleta | null; proxima: MensagemCompleta | null }
 const { m, anterior, proxima } = Astro.props;
+
+// Dados de artigo para o Google: título, data, autor e a igreja como editora.
+const artigo = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: m.titulo,
+  description: resumir(m.resumo, 155),
+  datePublished: m.data.slice(0, 10),
+  inLanguage: 'pt-BR',
+  author: { '@type': 'Person', name: m.autor },
+  publisher: { '@type': 'Organization', name: 'Peniel Church', logo: { '@type': 'ImageObject', url: new URL(rota('img/logo.png'), Astro.site).href } },
+  mainEntityOfPage: new URL(Astro.url.pathname, Astro.site).href,
+  ...(m.imagem_url ? { image: m.imagem_url } : {}),
+};
 ---
-<Base atual="mensagens" titulo={`${m.titulo} · Peniel Church`} descricao={resumir(m.resumo, 155)}>
+<Base atual="mensagens" titulo={`${m.titulo} · Peniel Church`} descricao={resumir(m.resumo, 155)} tipo="article" imagem={m.imagem_url} dados={artigo}>
   <TopoPagina sobretitulo={`${dataBR(m.data)} · ${m.autor}`} titulo={m.titulo}>
     <a slot="antes" class="voltar" href={rota('mensagens')}><Icone nome="seta" tam={16} traco={2.2} /> Todas as mensagens</a>
   </TopoPagina>
