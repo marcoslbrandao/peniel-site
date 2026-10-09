@@ -8,7 +8,7 @@ import { LINKS } from '../lib/config';
 interface Props { titulo?: string; descricao?: string; atual?: string }
 const {
   titulo = 'Peniel Church · Igreja brasileira em Reading, UK',
-  descricao = 'Uma igreja brasileira no coração de Reading. Culto todo domingo às 18h em Abbey Square, com tradução ao vivo para inglês e espanhol.',
+  descricao = 'Uma igreja de fala portuguesa no coração de Reading. Culto todo domingo às 18h em Abbey Square, com tradução ao vivo para inglês e espanhol.',
   atual = '',
 } = Astro.props;
 const canonica = new URL(Astro.url.pathname, Astro.site);
