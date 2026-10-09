@@ -11,10 +11,10 @@ import { DIAS, horaCurta } from './dados';
 type Apresentacao = { titulo: string; convite: string };
 
 const TEXTOS: { chave: RegExp; texto: Apresentacao }[] = [
-  { chave: /culto/i, texto: { titulo: 'Culto Dominical', convite: 'O encontro principal da semana: louvor, a Palavra e tempo juntos depois.' } },
-  { chave: /ora[çc][ãa]o/i, texto: { titulo: 'Sala de Oração', convite: 'Meia hora de oração juntos, de onde você estiver. Entra pelo link, sem senha.' } },
-  { chave: /estudo/i, texto: { titulo: 'Estudo Bíblico', convite: 'Estudo semanal com espaço para perguntas. Pelo app você acompanha o material.' } },
-  { chave: /jovens|alive/i, texto: { titulo: 'Peniel Alive', convite: 'O encontro dos jovens, sempre na casa de alguém. Pergunte onde é esta semana.' } },
+  { chave: /culto/i, texto: { titulo: 'Culto Dominical', convite: 'O encontro principal da semana: louvor, a Palavra e comunhão.' } },
+  { chave: /ora[çc][ãa]o/i, texto: { titulo: 'Sala de Oração', convite: 'Um tempo muito especial em que, juntos, buscamos a Deus e oramos uns pelos outros. Venha participar de onde você estiver. É só entrar pelo link.' } },
+  { chave: /estudo/i, texto: { titulo: 'Estudo Bíblico', convite: 'Um tempo para aprender mais da Palavra de Deus, compartilhar dúvidas e crescer juntos na fé. Você também pode acompanhar o material pelo app.' } },
+  { chave: /jovens|alive/i, texto: { titulo: 'Peniel Alive', convite: 'Um encontro de jovens com fome de Deus, para aprender sobre a vida e crescer na fé. A gente se reúne na casa de um dos jovens. Fale conosco para saber onde será o próximo encontro. Venha fazer parte!' } },
 ];
 
 const SELO: Record<Evento['tipo'], { rotulo: string; classe: string }> = {
@@ -31,6 +31,8 @@ export type Cartao = {
   convite: string;
   selo: { rotulo: string; classe: string };
   ehEstudo: boolean;
+  ehOracao: boolean;
+  diaSemana: number;
 };
 
 function localCurto(e: Evento): string {
@@ -51,6 +53,8 @@ export function cartoes(eventos: Evento[]): Cartao[] {
         convite: t?.convite ?? e.descricao ?? '',
         selo: SELO[e.tipo] ?? SELO.presencial,
         ehEstudo: /estudo/i.test(e.nome),
+        ehOracao: /ora[çc][ãa]o/i.test(e.nome),
+        diaSemana: e.dia_semana as number,
       };
     });
 }

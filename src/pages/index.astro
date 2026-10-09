@@ -56,6 +56,7 @@ const miniEventos = [
             </div>
             <p>{c.convite}</p>
             {c.ehEstudo && estudoISO && <span class="encontro-proximo">Próximo: {dataBR(estudoISO)}</span>}
+            {c.ehOracao && <span class="encontro-proximo">Próximo: {dataBR(proximaData(c.diaSemana))}</span>}
           </article>
         ))}
       </div>
@@ -97,7 +98,7 @@ const miniEventos = [
             <span class="rotulo">Pastores</span>
             <h3>Marcos &amp; Débora Brandão</h3>
           </div>
-          <p>Vieram do Brasil em 2003 com a ideia de ficar dois anos. Chegaram à Peniel, em Reading, em 4 de março de 2017 — e desde então pastoreiam a igreja.</p>
+          <p>Casados desde 2001, vieram do Brasil em 2003 com a ideia de ficar dois anos. Em 2010 fundaram a Peniel Church em Londres e, em 2017, trouxeram a missão para Reading.</p>
           <a class="link-seta" href={rota('sobre#pastores')}>Conheça a história deles <Icone nome="seta" tam={16} traco={2.2} /></a>
         </div>
       </article>
@@ -133,7 +134,7 @@ const miniEventos = [
             <Icone nome="estacionamento" tam={22} cor="#1A1740" traco={1.7} />
             <div>
               <h4>Estacionamento</h4>
-              <p>Temos poucas vagas na igreja, mas há dois estacionamentos a 5 minutos a pé: <a href={LINKS.estacionamentoHorseBarge} rel="noopener">Horse and Barge</a> e <a href={LINKS.estacionamentoQueensRoad} rel="noopener">Queens Road</a>.</p>
+              <p>Temos algumas vagas na igreja e outras no prédio em frente (fale com alguém da recepção para pegar o permit). Há também dois estacionamentos a 5 minutos a pé: <a href={LINKS.estacionamentoHorseBarge} rel="noopener">Horse and Barge</a> e <a href={LINKS.estacionamentoQueensRoad} rel="noopener">Queens Road</a>.</p>
             </div>
           </div>
           <div class="dica">
@@ -243,13 +244,24 @@ const miniEventos = [
     <div class="wrap">
       <div class="app-texto">
         <h2 id="app-titulo">O site é a porta. O app é a casa.</h2>
-        <p>Quem já faz parte da Peniel vive a semana pelo app: grupos, escalas e o estudo de quarta ficam na Área do Membro. Mas não é preciso ser membro para usar — a Bíblia, os devocionais, o versículo do dia, a agenda e os avisos da igreja estão abertos a qualquer pessoa. Baixar é de graça.</p>
+        <p class="app-sub">A Peniel mais perto de você, todos os dias</p>
+        <p>Nosso app é para todos: quem já faz parte da Peniel, quem está chegando e quem deseja conhecer mais de Deus. Nele, você encontra conteúdo para fortalecer sua fé e acompanhar a vida da igreja, de onde estiver. E o melhor: tudo pode ser compartilhado! Leve uma palavra de fé e encorajamento aos seus amigos e à sua família.</p>
 
+        <p class="recursos-titulo">Você não precisa ser membro para acessar:</p>
         <ul class="recursos">
-          {['Bíblia em vários idiomas', 'Devocional três vezes por semana', 'Grupos, chat e escalas', 'Agenda e avisos da igreja', 'Oferta segura em segundos', 'Tradução ao vivo do culto'].map((r) => (
+          {['Versículo do dia', 'Resumo da mensagem de domingo', 'Devocionais', 'Bíblia em vários idiomas', 'Plano de leitura', 'Agenda e avisos da igreja', 'Mídia', 'Pedidos de oração', 'Tradução ao vivo do culto em inglês e espanhol', 'Ofertas', 'E muito mais!'].map((r) => (
             <li><Icone nome="check" tam={17} cor="#F5C842" traco={2.4} />{r}</li>
           ))}
         </ul>
+
+        <p class="recursos-titulo">Para quem é membro, há também um espaço para cuidar da nossa caminhada juntos:</p>
+        <ul class="recursos">
+          {['Cadastro de membro', 'Grupos com seus próprios materiais e chats', 'Área dos jovens', 'Área da banda', 'Área de estudo bíblico', 'Escalas dos ministérios'].map((r) => (
+            <li><Icone nome="check" tam={17} cor="#F5C842" traco={2.4} />{r}</li>
+          ))}
+        </ul>
+
+        <p class="recursos-titulo">Baixe gratuitamente e venha caminhar com a gente!</p>
 
         <div class="lojas">
           <a class="loja loja-ativa" href={LINKS.appStore} rel="noopener">
@@ -309,7 +321,7 @@ const miniEventos = [
     <div class="wrap contribua">
       <div class="contribua-texto">
         <h2 id="contribua-titulo">Contribua com a obra</h2>
-        <p>Sua oferta contribui com a manutenção da igreja, com missões e com quem bate à nossa porta precisando de ajuda. É o que mantém as portas abertas e o trabalho seguindo durante a semana, dentro e fora daqui. O pagamento é processado pelo Stripe — a Peniel não guarda nenhum dado do seu cartão.</p>
+        <p>Sua oferta ajuda a manter a igreja, cobrir suas despesas, apoiar os projetos dos quais fazemos parte e atender às necessidades da comunidade local. Com sua contribuição, seguimos de portas abertas, compartilhando o amor de Deus dentro e fora da igreja. O pagamento é processado pelo Stripe. A Peniel não armazena os dados do seu cartão.</p>
         <div class="garantias">
           <span><Icone nome="cadeado" tam={16} cor="#27AE60" traco={2} /> Conexão segura</span>
           <span><Icone nome="escudo" tam={16} cor="#27AE60" traco={2} /> Pagamento processado pelo Stripe</span>
