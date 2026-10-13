@@ -199,7 +199,7 @@ const miniEventos = [
           {mensagens.length ? mensagens.map((m, i) => (
             <a class="cartao mensagem" href={rota(`mensagens/${slugMensagem(m)}`)}>
               <div class={m.imagem_url ? `mensagem-capa capa-${i % 3}` : 'mensagem-capa capa-padrao-mini'}>
-                {m.imagem_url ? <img src={m.imagem_url} alt="" loading="lazy" /> : <Icone nome="documento" tam={22} traco={1.6} />}
+                {m.imagem_url ? <img src={m.imagem_url} alt="" loading="lazy" /> : <Icone nome="livro" tam={26} cor="#fff" traco={1.7} />}
               </div>
               <div class="mensagem-corpo">
                 <span class="mensagem-meta">{dataBR(m.data)} · {m.autor}</span>
