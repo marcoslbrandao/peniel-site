@@ -26,7 +26,7 @@ export const LINKS = {
 
 // Mesma chave do index.html do app.penielchurch.org.uk.
 // No dia em que o Google Play aprovar: trocar para true.
-export const GOOGLE_PLAY_NO_AR = false;
+export const GOOGLE_PLAY_NO_AR = true;
 
 export const OFERTA_VALORES = [10, 25, 50, 100, 200];
 export const OFERTA_MAXIMO = 5000; // mesmo teto da Edge Function
