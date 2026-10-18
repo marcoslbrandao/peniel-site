@@ -9,6 +9,8 @@ import { devocionais, dataBR, blocos } from '../lib/dados';
 // aparece aberto; os anteriores ficam numa lista que abre ao tocar.
 const lista = await devocionais(60);
 const [atual, ...anteriores] = lista;
+import { comReferencias } from '../lib/referenciasBiblicas';
+import VersiculoJanela from '../components/VersiculoJanela.astro';
 ---
 <Base atual="devocionais" titulo="Devocionais · Peniel Church" descricao="O Devocional Peniel: uma palavra para o seu dia, toda segunda, quarta e sexta.">
   <TopoPagina sobretitulo="Devocional Peniel" titulo="Uma palavra para o seu dia" lead="Toda segunda, quarta e sexta sai um devocional novo, aqui e no app ao mesmo tempo." />
@@ -20,8 +22,8 @@ const [atual, ...anteriores] = lista;
           {atual.imagem_url && <img class="artigo-capa" style="aspect-ratio:2/1" src={atual.imagem_url} alt="" />}
           <span class="meta" style="font-weight:600">{dataBR(atual.data)}</span>
           <h2 style="margin-top:-6px">{atual.titulo}</h2>
-          <blockquote class="versiculo-destaque"><p>“{atual.versiculo}”</p><cite>{atual.referencia}</cite></blockquote>
-          {blocos(atual.texto).map((b) => (b.tipo === 'h' ? <h4>{b.texto}</h4> : <p>{b.texto}</p>))}
+          <blockquote class="versiculo-destaque"><p>“{atual.versiculo}”</p><cite set:html={comReferencias(atual.referencia)} /></blockquote>
+          {blocos(atual.texto).map((b) => (b.tipo === 'h' ? <h4>{b.texto}</h4> : <p set:html={comReferencias(b.texto)} />))}
         </article>
         <aside class="lateral">
           <div class="cartao">
@@ -50,8 +52,8 @@ const [atual, ...anteriores] = lista;
               </summary>
               <div class="aberto texto-longo">
                 {d.imagem_url && <img src={d.imagem_url} alt="" loading="lazy" />}
-                <blockquote class="versiculo-destaque"><p>“{d.versiculo}”</p><cite>{d.referencia}</cite></blockquote>
-                {blocos(d.texto).map((b) => (b.tipo === 'h' ? <h4>{b.texto}</h4> : <p>{b.texto}</p>))}
+                <blockquote class="versiculo-destaque"><p>“{d.versiculo}”</p><cite set:html={comReferencias(d.referencia)} /></blockquote>
+                {blocos(d.texto).map((b) => (b.tipo === 'h' ? <h4>{b.texto}</h4> : <p set:html={comReferencias(b.texto)} />))}
               </div>
             </details>
           ))}
@@ -61,6 +63,7 @@ const [atual, ...anteriores] = lista;
   )}
 
   <CtaFinal />
+  <VersiculoJanela />
 </Base>
 
 <script>
