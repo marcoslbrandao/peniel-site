@@ -1,0 +1,100 @@
+---
+// Janela que mostra o(s) versiculo(s) quando a pessoa clica numa referencia
+// biblica da mensagem (botao .ref-biblica, gerado por comReferencias()).
+// O texto vem na hora do YouVersion, pela mesma Edge Function do app
+// (biblia-youversion) — nada do texto biblico fica guardado no site.
+---
+<dialog id="versiculo-janela" class="vj" aria-labelledby="vj-titulo">
+  <div class="vj-caixa">
+    <header class="vj-topo">
+      <h3 id="vj-titulo">Versículo</h3>
+      <button type="button" class="vj-fechar" aria-label="Fechar">×</button>
+    </header>
+    <div class="vj-corpo" aria-live="polite"></div>
+    <p class="vj-copy"></p>
+  </div>
+</dialog>
+
+<script>
+  import { SUPABASE_URL, SUPABASE_ANON_KEY } from '../lib/config';
+
+  const NVI = 129;
+  const janela = document.getElementById('versiculo-janela') as HTMLDialogElement | null;
+  const titulo = janela?.querySelector('#vj-titulo') as HTMLElement;
+  const corpo = janela?.querySelector('.vj-corpo') as HTMLElement;
+  const copy = janela?.querySelector('.vj-copy') as HTMLElement;
+  const cache = new Map<string, Promise<{ verses: { verse: number; text: string }[]; copyright: string }>>();
+
+  function capitulo(ref: string) {
+    if (!cache.has(ref)) {
+      cache.set(ref, fetch(`${SUPABASE_URL}/functions/v1/biblia-youversion`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', apikey: SUPABASE_ANON_KEY, Authorization: `Bearer ${SUPABASE_ANON_KEY}` },
+        body: JSON.stringify({ bible: NVI, ref }),
+      }).then(async (r) => {
+        const d = await r.json();
+        if (!r.ok || !Array.isArray(d.verses)) throw new Error('falhou');
+        return d;
+      }).catch((e) => { cache.delete(ref); throw e; }));
+    }
+    return cache.get(ref)!;
+  }
+
+  function linha(num: number, texto: string) {
+    const p = document.createElement('p');
+    const n = document.createElement('sup');
+    n.textContent = String(num);
+    p.append(n, ' ', texto);
+    return p;
+  }
+
+  async function abrir(btn: HTMLElement) {
+    if (!janela) return;
+    const usfm = btn.dataset.usfm!;
+    const cap = btn.dataset.cap!;
+    const versos = (btn.dataset.versos || '').split(',').filter(Boolean).map(Number);
+    titulo.textContent = `${btn.dataset.rotulo} · NVI`;
+    corpo.innerHTML = '<p class="vj-carregando">Carregando…</p>';
+    copy.textContent = '';
+    if (!janela.open) janela.showModal();
+    try {
+      const d = await capitulo(`${usfm}.${cap}`);
+      const lista = versos.length ? d.verses.filter((v) => versos.includes(v.verse)) : d.verses;
+      corpo.replaceChildren(...(lista.length ? lista : d.verses).map((v) => linha(v.verse, v.text)));
+      copy.textContent = d.copyright || '';
+    } catch {
+      corpo.innerHTML = '<p class="vj-carregando">Não foi possível carregar o versículo agora. Tente de novo em instantes.</p>';
+    }
+  }
+
+  document.addEventListener('click', (e) => {
+    const btn = (e.target as HTMLElement).closest<HTMLElement>('.ref-biblica');
+    if (btn) { e.preventDefault(); abrir(btn); }
+  });
+  janela?.querySelector('.vj-fechar')?.addEventListener('click', () => janela.close());
+  // Clique fora da caixa fecha.
+  janela?.addEventListener('click', (e) => { if (e.target === janela) janela.close(); });
+</script>
+
+<style is:global>
+  .ref-biblica {
+    font: inherit; color: var(--roxo-2); font-weight: 600; cursor: pointer;
+    background: linear-gradient(transparent 58%, rgba(245, 200, 66, 0.45) 58%);
+    border: 0; padding: 0 1px; border-radius: 2px;
+    text-decoration: underline; text-decoration-color: rgba(83, 74, 183, 0.35); text-underline-offset: 3px;
+  }
+  .ref-biblica:hover, .ref-biblica:focus-visible { background: rgba(245, 200, 66, 0.55); text-decoration-color: var(--roxo-2); outline: none; }
+
+  .vj { border: 0; padding: 0; background: transparent; max-width: min(560px, calc(100vw - 32px)); width: 100%; }
+  .vj::backdrop { background: rgba(16, 13, 40, 0.55); backdrop-filter: blur(2px); }
+  .vj-caixa { background: var(--surface); border-radius: var(--raio-g); box-shadow: 0 24px 60px rgba(16, 13, 40, 0.35); overflow: hidden; }
+  .vj-topo { display: flex; align-items: center; justify-content: space-between; gap: 12px; background: var(--navy); padding: 16px 20px; }
+  .vj-topo h3 { color: #fff; font-size: 18px; }
+  .vj-fechar { background: rgba(255,255,255,0.12); color: #fff; border: 0; width: 34px; height: 34px; border-radius: 50%; font-size: 22px; line-height: 1; cursor: pointer; flex: none; }
+  .vj-fechar:hover { background: rgba(255,255,255,0.22); }
+  .vj-corpo { padding: 20px 22px 6px; max-height: 60vh; overflow-y: auto; }
+  .vj-corpo p { font-size: 17px; line-height: 1.65; color: var(--texto); margin-bottom: 12px; }
+  .vj-corpo sup { color: var(--roxo-2); font-weight: 700; font-size: 11px; }
+  .vj-carregando { color: var(--texto-2) !important; }
+  .vj-copy { font-size: 11px; color: var(--texto-2); padding: 0 22px 18px; margin: 0; }
+</style>

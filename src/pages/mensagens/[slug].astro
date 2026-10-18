@@ -5,6 +5,8 @@ import Icone from '../../components/Icone.astro';
 import CtaFinal from '../../components/CtaFinal.astro';
 import { rota } from '../../lib/rotas';
 import { todasMensagens, dataBR, blocos, resumir, slugMensagem, type MensagemCompleta } from '../../lib/dados';
+import { comReferencias } from '../../lib/referenciasBiblicas';
+import VersiculoJanela from '../../components/VersiculoJanela.astro';
 
 // Uma página por mensagem, gerada no build a partir da tabela `mensagens`.
 export async function getStaticPaths() {
@@ -42,7 +44,7 @@ const artigo = {
       <article class="texto-longo">
         {m.imagem_url && <img class="artigo-capa" src={m.imagem_url} alt="" />}
         <p style="font-size:19px;color:#1A1A2E;font-weight:500">{m.resumo}</p>
-        {blocos(m.conteudo, { subtitulos: true }).map((b) => (b.tipo === 's' ? <h3>{b.texto}</h3> : b.tipo === 'h' ? <h4>{b.texto}</h4> : <p>{b.texto}</p>))}
+        {blocos(m.conteudo, { subtitulos: true }).map((b) => (b.tipo === 's' ? <h3>{b.texto}</h3> : b.tipo === 'h' ? <h4>{b.texto}</h4> : <p set:html={comReferencias(b.texto)} />))}
       </article>
       <aside class="lateral">
         {proxima && (
@@ -58,6 +60,8 @@ const artigo = {
       </aside>
     </div>
   </section>
+
+  <VersiculoJanela />
 
   <CtaFinal />
 </Base>

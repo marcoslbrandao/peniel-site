@@ -181,7 +181,8 @@ export function blocos(texto: string, opcoes: { subtitulos?: boolean } = {}): { 
   const ROTULOS = /^(Para refletir|Ora[çc][ãa]o|Refer[êe]ncias|Aplica[çc][ãa]o|Desafio)\s*:?\s*/i;
   const saida: { tipo: 'p' | 'h' | 's'; texto: string }[] = [];
   for (const bruto of texto.replace(/\r/g, '').split(/\n\s*\n/)) {
-    const linhas = bruto.split('\n').map((l) => l.trim()).filter(Boolean);
+    // "**Subtitulo**" (negrito em markdown) vira subtitulo sem os asteriscos.
+    const linhas = bruto.split('\n').map((l) => l.trim().replace(/^\*\*(.+)\*\*$/, '$1')).filter(Boolean);
     if (!linhas.length) continue;
     const m = linhas[0].match(ROTULOS);
     if (opcoes.subtitulos && ehSubtitulo(linhas)) {
