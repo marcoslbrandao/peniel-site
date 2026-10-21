@@ -16,6 +16,7 @@ const FIXAS: { caminho: string; freq: string; prioridade: string }[] = [
   { caminho: 'live-translation', freq: 'monthly', prioridade: '0.7' },
   { caminho: 'contribua', freq: 'monthly', prioridade: '0.6' },
   { caminho: 'contato', freq: 'yearly', prioridade: '0.6' },
+  { caminho: 'conecte', freq: 'monthly', prioridade: '0.5' },
   { caminho: 'politica-de-privacidade', freq: 'yearly', prioridade: '0.3' },
 ];
 
