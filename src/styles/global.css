@@ -473,6 +473,13 @@ svg { flex-shrink: 0; }
 .btn-claro:hover { color: var(--navy); border-color: var(--roxo-2); }
 .especial { border-left: 5px solid var(--cor-evento, var(--aovivo)); }
 .data-grande { width: 92px; height: 92px; border-radius: 18px; background: var(--roxo-claro); color: var(--roxo-2); display: flex; flex-direction: column; align-items: center; justify-content: center; }
+/* Evento especial com imagem de capa (a mesma do app, 2:1) */
+.item-agenda.com-capa { grid-template-columns: 300px minmax(0, 1fr) auto; }
+.item-agenda-capa { position: relative; width: 300px; aspect-ratio: 2 / 1; border-radius: 14px; overflow: hidden; background: var(--roxo-claro); }
+.item-agenda-capa img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.data-selo { position: absolute; left: 10px; top: 10px; min-width: 52px; padding: 6px 8px; border-radius: 12px; background: rgba(255,255,255,.94); color: var(--roxo-2); display: flex; flex-direction: column; align-items: center; line-height: 1; box-shadow: 0 2px 8px rgba(0,0,0,.15); }
+.data-selo b { font-family: var(--f-titulo); font-size: 20px; font-weight: 800; }
+.data-selo span { font-size: 10.5px; font-weight: 700; letter-spacing: .08em; margin-top: 3px; }
 .data-grande b { font-family: var(--f-titulo); font-size: 30px; font-weight: 800; line-height: 1; }
 .data-grande span { font-size: 12px; font-weight: 700; letter-spacing: .08em; margin-top: 4px; }
 
@@ -560,6 +567,8 @@ svg { flex-shrink: 0; }
   .pastores-grande img { max-width: 420px; aspect-ratio: 1 / 1; }
   .crencas { grid-template-columns: minmax(0, 1fr); }
   .item-agenda { grid-template-columns: 96px minmax(0, 1fr); }
+  .item-agenda.com-capa { grid-template-columns: 220px minmax(0, 1fr); }
+  .item-agenda-capa { width: 220px; }
   .item-agenda .acoes { grid-column: 1 / -1; flex-direction: row; flex-wrap: wrap; }
   .passos { grid-template-columns: minmax(0, 1fr); }
   .cta-final { flex-direction: column; align-items: flex-start; }
@@ -572,6 +581,8 @@ svg { flex-shrink: 0; }
   .crencas li { padding: 20px 20px 20px 62px; }
   .crencas li::before { left: 18px; top: 19px; font-size: 18px; }
   .item-agenda { grid-template-columns: minmax(0, 1fr); gap: 14px; padding: 20px; }
+  .item-agenda.com-capa { grid-template-columns: minmax(0, 1fr); }
+  .item-agenda-capa { width: 100%; }
   .item-agenda .acoes .btn { flex: 1 1 auto; }
   .data-grande { width: 72px; height: 72px; }
   .data-grande b { font-size: 24px; }

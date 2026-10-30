@@ -64,8 +64,15 @@ const SELO = { presencial: ['Presencial', 'selo-presencial'], online: ['Online',
           {especiais.map((e) => {
             const dm = diaMes(e.data!);
             return (
-              <article class="cartao item-agenda especial" style={`--cor-evento:${e.cor || '#E84B1A'}`}>
-                <div class="data-grande"><b>{dm.dia}</b><span>{dm.mes}</span></div>
+              <article class={`cartao item-agenda especial${e.imagem_url ? ' com-capa' : ''}`} style={`--cor-evento:${e.cor || '#E84B1A'}`}>
+                {e.imagem_url ? (
+                  <div class="item-agenda-capa">
+                    <img src={e.imagem_url} alt={e.nome} width="1600" height="800" loading="lazy" decoding="async" />
+                    <div class="data-selo"><b>{dm.dia}</b><span>{dm.mes}</span></div>
+                  </div>
+                ) : (
+                  <div class="data-grande"><b>{dm.dia}</b><span>{dm.mes}</span></div>
+                )}
                 <div>
                   <h3>{e.nome}</h3>
                   {e.descricao && <p>{e.descricao}</p>}
